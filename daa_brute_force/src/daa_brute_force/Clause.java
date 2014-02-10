@@ -1,6 +1,6 @@
 package daa_brute_force;
 
-import java.util.HashMap;
+import java.util.ArrayList;
 
 /**A clause is a disjunction of
  * variables.
@@ -9,13 +9,23 @@ import java.util.HashMap;
  */
 public class Clause 
 {
-    private String clause;
-    private String[] variables;
-    public Clause(String clause)
+    //private String clause;
+    private ArrayList<Boolean> variables;
+    public Clause()
     {
-        this.clause = clause;
+        variables = new ArrayList<Boolean>();
     }
     
+    //May not be needed.
+    public Clause(ArrayList<Boolean> variables)
+    {
+        this.variables = variables;
+    }
+    
+    public void addVariable(int index, Boolean variable)
+    {
+        variables.add(index, variable);
+    }
     /**
      * @return true if this clause evaluates
      * to true when all variables are 
