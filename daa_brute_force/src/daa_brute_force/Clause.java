@@ -32,7 +32,8 @@ public class Clause
      */
     public boolean evaluate()
     {
-        //stub
+        for(boolean var : variables)
+            if(var == true) return true;
         return false;
     }
 }
