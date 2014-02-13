@@ -95,7 +95,7 @@ public class Parser
                      */
                     newClause.addVariable(
                             Math.abs(Integer.parseInt(splitLine[i])),
-                            "NEGATED");
+                            Clause.NEGATED);
                 }
                 else
                 {
@@ -104,7 +104,7 @@ public class Parser
                      */
                     newClause.addVariable(
                             Integer.parseInt(splitLine[i]), 
-                            "POSITIVE");
+                            Clause.POSITIVE);
                 }
             }
         }

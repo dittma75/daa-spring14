@@ -2,7 +2,9 @@ package daa_brute_force;
 
 import java.util.Scanner;
 import java.util.ArrayList;
-/**
+/**CNFEval takes a file as input, parses it
+ * with the Parser class into Clauses, and
+ * tests the Clauses for satisfiability.
  *
  * @author Kevin Dittmar
  */
@@ -14,6 +16,11 @@ public class CNFEval
     
     private static ArrayList<Clause> clauses = new ArrayList<Clause>();
     
+    /**
+     * Adds a Clause to be considered when testing
+     * the satisfiability.
+     * @param clause the Clause to be added.
+     */
     public static void addClause(Clause clause)
     {
         clauses.add(clause);
