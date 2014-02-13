@@ -1,9 +1,13 @@
 package daa_brute_force;
 
+import java.io.File;
+import java.io.FileNotFoundException;
 import java.util.Scanner;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Set;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**CNFEval takes a file as input, parses it
  * with the Parser class into Clauses, and
@@ -69,6 +73,18 @@ public class CNFEval
     
     public static void main(String[] args) 
     {
+	
+	//---------
+	File file = new File("s20.cnf");//this is just the file I wanted to test with
+	Scanner scanner = null;
+	try {
+	    scanner = new Scanner(file);
+	} catch (FileNotFoundException ex) {
+	    Logger.getLogger(CNFEval.class.getName()).log(Level.SEVERE, null, ex);
+	    System.out.println("Nonono file.");//this was for me to test
+	}
+	//---------
+	
 //        Scanner scanner = new Scanner(System.in);
 //        Parser parser = new Parser(scanner);
 //        parser.parseFile();
