@@ -1,8 +1,6 @@
 package daa_brute_force;
 
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Iterator;
 /**A clause is a disjunction of
  * variables.
  *

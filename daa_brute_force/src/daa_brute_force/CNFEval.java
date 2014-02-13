@@ -1,9 +1,10 @@
 package daa_brute_force;
 
+import java.util.Scanner;
 import java.util.ArrayList;
 /**
  *
- * @author Kevin
+ * @author Kevin Dittmar
  */
 public class CNFEval 
 {
@@ -20,7 +21,8 @@ public class CNFEval
     
     public static void main(String[] args) 
     {
-        Parser parser = new Parser();
+        Scanner scanner = new Scanner(System.in);
+        Parser parser = new Parser(scanner);
         parser.parseFile();
         
         for (int i = 0; i < clauses.size(); i++)
