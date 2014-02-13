@@ -36,7 +36,7 @@ public class Parser
             {
                 //This is a comment; do nothing.
             }
-            if (nextLine.startsWith("p cnf"))
+            else if (nextLine.startsWith("p cnf"))
             {
                 splitLine = nextLine.split(" ");
                 numberOfVariables = Integer.parseInt(splitLine[2]);
@@ -49,14 +49,18 @@ public class Parser
                 //O(n)
                 for (int i = 0; i < splitLine.length; i++)
                 {
-                    if (splitLine[i].charAt(0) == '-')
+                    if (Integer.parseInt(splitLine[i]) == 0)
+                    {
+                        CNFEval.addClause(newClause);
+                    }
+                    else if (splitLine[i].startsWith("-"))
                     {
                         /*Adds the variable as false at its position (which is
                          *the second char of the String) in the ArrayList.
                          */
                         newClause.addVariable(
-                                Character.digit(splitLine[i].charAt(1), 10),
-                                Boolean.FALSE);
+                                Math.abs(Integer.parseInt(splitLine[i])),
+                                "NEGATED");
                     }
                     else
                     {
@@ -64,11 +68,10 @@ public class Parser
                          *the first char of the String) in the ArrayList.
                          */
                         newClause.addVariable(
-                                Character.digit(splitLine[i].charAt(0), 10), 
-                                Boolean.TRUE);
+                                Integer.parseInt(splitLine[i]), 
+                                "POSITIVE");
                     }
                 }
-                CNFEval.addClause(newClause);
             }
         }
     }

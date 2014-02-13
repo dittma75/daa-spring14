@@ -11,7 +11,7 @@ public class CNFEval
      * @param args the command line arguments
      */
     
-    private static ArrayList<Clause> clauses;
+    private static ArrayList<Clause> clauses = new ArrayList<Clause>();
     
     public static void addClause(Clause clause)
     {
@@ -20,6 +20,12 @@ public class CNFEval
     
     public static void main(String[] args) 
     {
+        Parser parser = new Parser();
+        parser.parseFile();
         
+        for (int i = 0; i < clauses.size(); i++)
+        {
+            System.out.println(clauses.get(i));
+        }
     }
 }
