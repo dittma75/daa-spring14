@@ -1,6 +1,7 @@
 package daa_brute_force;
 
 import java.util.HashMap;
+import java.util.Set;
 /**A clause is a disjunction of
  * variables.
  *
@@ -40,17 +41,21 @@ public class Clause
     }
     
     /**
+     * @param truthvals the current truth values
      * @return true if this clause evaluates
      * to true.
      */
-    public boolean evaluate()
+    public boolean evaluate(HashMap<Integer, Boolean> truthvals)
     {
+        Set<Integer> keys = variables.keySet();
+        for (Integer key : keys)
+        {
+            String var = variables.get(key);
+            boolean neg = truthvals.get(key);
+            if(var.equals("+") && neg || var.equals("-") && !neg) return true;
+        }
+        
         return false;
-//        if (variables.containsValue(Boolean.TRUE))
-//        {
-//            return true;
-//        }
-//        return false;
     }
     
     /**
