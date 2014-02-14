@@ -8,7 +8,7 @@ import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JFileChooser;
-
+import java.math.BigInteger;
 /**CNFEval takes a file as input, parses it
  * with the Parser class into Clauses, and
  * tests the Clauses for satisfiability.
@@ -24,7 +24,7 @@ public class CNFEval
      */
     
     private static ArrayList<Clause> clauses = new ArrayList<Clause>();
-    private static int truthValues;
+    private static BigInteger truthValues;
     private static Component parent;
     
     public static void main(String[] args) 
@@ -49,7 +49,7 @@ public class CNFEval
 	
         Parser parser = new Parser(scanner);
         parser.parseFile();
-        truthValues = (int) (Math.pow(2, parser.getNumberOfVariables()) - 1);
+        truthValues = makeTruthValues(parser.getNumberOfVariables());
         boolean satisfiable = evaluate(truthValues);
         System.out.println(satisfiable);
     }
@@ -69,9 +69,11 @@ public class CNFEval
      * @param truthvals a map of the current truth values 
      * @return true if CNF evaluates to true, false otherwise
      */
-    public static boolean evaluate(int truthValues)
+    private static boolean evaluate(BigInteger truthValues)
     {
-        for (int i = truthValues; i >= 0; i--)
+        for (BigInteger i = truthValues; 
+             i.compareTo(BigInteger.ZERO) > 0;
+             i = i.subtract(BigInteger.ONE))
         {
             if (evaluateDNFs(i) == true)
             {
@@ -81,7 +83,7 @@ public class CNFEval
         return false;
     }
     
-    private static boolean evaluateDNFs(int truthValues)
+    private static boolean evaluateDNFs(BigInteger truthValues)
     {
         for(Clause clause : clauses)
         {
@@ -95,8 +97,18 @@ public class CNFEval
     /* Information on getting the nth bit from an integer.
      * http://stackoverflow.com/questions/14145733/how-can-one-read-an-integer-bit-by-bit-in-java
      */
-    public static int getTruthValue(int truthValues, int variableNumber)
+    public static boolean getTruthValue(BigInteger truthValues, int variableNumber)
     {
-        return (truthValues >> variableNumber - 1) & 1;
+        return truthValues.testBit(variableNumber - 1);
+    }
+    
+    private static BigInteger makeTruthValues(int variableNumber)
+    {
+        String values = "";
+        for (int i = 0; i < variableNumber; i++)
+        {
+            values += "1";
+        }
+        return new BigInteger(values);
     }
 }

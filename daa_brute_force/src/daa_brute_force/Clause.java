@@ -2,6 +2,7 @@ package daa_brute_force;
 
 import java.util.HashMap;
 import java.util.Set;
+import java.math.BigInteger;
 
 /**A clause is a disjunction of
  * variables.
@@ -40,15 +41,15 @@ public class Clause
      * @return true if this clause evaluates
      * to true.
      */
-    public boolean evaluate(int truthvals)
+    public boolean evaluate(BigInteger truthvals)
     {
         Set<Integer> keys = variables.keySet();
         for (Integer key : keys)
         {
             String variable = variables.get(key);
-            int value = CNFEval.getTruthValue(truthvals, key.intValue());
-            if ((variable.equals("+") && (value == 1)) || 
-                (variable.equals("-") && (value == 0))) 
+            boolean value = CNFEval.getTruthValue(truthvals, key.intValue());
+            if ((variable.equals("+") && (value)) || 
+                (variable.equals("-") && (!value))) 
             {
                 
                 return true;
