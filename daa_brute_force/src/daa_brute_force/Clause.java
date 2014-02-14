@@ -2,6 +2,7 @@ package daa_brute_force;
 
 import java.util.HashMap;
 import java.util.Set;
+import java.util.ArrayList;
 /**A clause is a disjunction of
  * variables.
  *
@@ -24,12 +25,6 @@ public class Clause
         variables = new HashMap<Integer, String>();
     }
     
-//    //May not be needed.
-//    public Clause(ArrayList<Boolean> variables)
-//    {
-//        this.variables = variables;
-//    }
-    
     /**
      * Adds a variable to the disjunction Clause.
      * @param index the numeric identifier for the variable.
@@ -45,16 +40,19 @@ public class Clause
      * @return true if this clause evaluates
      * to true.
      */
-    public boolean evaluate(HashMap<Integer, Boolean> truthvals)
+    public boolean evaluate(int truthvals)
     {
         Set<Integer> keys = variables.keySet();
         for (Integer key : keys)
         {
-            String var = variables.get(key);
-            boolean neg = truthvals.get(key);
-            if(var.equals("+") && neg || var.equals("-") && !neg) return true;
+            String variable = variables.get(key);
+            int value = CNFEval.getTruthValue(truthvals, key);
+            if ((variable.equals("+") && (value == 1)) || 
+                (variable.equals("-") && (value == 0))) 
+            {
+                return true;
+            }
         }
-        
         return false;
     }
     

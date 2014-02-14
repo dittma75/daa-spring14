@@ -22,6 +22,24 @@ public class Parser
         this.scanner = scanner;
     }
     
+    /**
+     * @return number of clauses as given by the
+     * parsed file
+     */
+    public int getNumberOfVariables()
+    {
+        return numberOfVariables;
+    }
+    
+    /**
+     * @return number of clauses as given by the
+     * parsed file.
+     */
+    public int getNumberOfClauses()
+    {
+        return numberOfClauses;
+    }
+    
     /**Parse the file on the Scanner as
      * input for CNF evaluation.
      */
