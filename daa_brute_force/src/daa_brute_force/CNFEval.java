@@ -51,8 +51,13 @@ public class CNFEval
 	
         Parser parser = new Parser(scanner);
         parser.parseFile();
-        truthValues = (int) Math.pow(2, parser.getNumberOfVariables() + 1) - 1;
-        boolean satisfiable = evaluate();
+        for (int i = 0; i < clauses.size(); i++)
+        {
+            System.out.println(clauses.get(i).toString());
+        }
+        truthValues = (int) (Math.pow(2, parser.getNumberOfVariables()) - 1);
+        boolean satisfiable = evaluate(truthValues);
+        System.out.println(satisfiable);
     }
     
     /**
@@ -70,7 +75,19 @@ public class CNFEval
      * @param truthvals a map of the current truth values 
      * @return true if CNF evaluates to true, false otherwise
      */
-    public static boolean evaluate()
+    public static boolean evaluate(int truthValues)
+    {
+        for (int i = truthValues; i >= 0; i--)
+        {
+            if (evaluateDNFs(i) == true)
+            {
+                return true;
+            }
+        }
+        return false;
+    }
+    
+    private static boolean evaluateDNFs(int truthValues)
     {
         for(Clause clause : clauses)
         {
@@ -79,10 +96,8 @@ public class CNFEval
                 return false;
             }
         }
-        
         return true;
     }
-    
     /* Information on getting the nth bit from an integer.
      * http://stackoverflow.com/questions/14145733/how-can-one-read-an-integer-bit-by-bit-in-java
      */

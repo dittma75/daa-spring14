@@ -42,17 +42,21 @@ public class Clause
      */
     public boolean evaluate(int truthvals)
     {
+        String result = "";
         Set<Integer> keys = variables.keySet();
         for (Integer key : keys)
         {
             String variable = variables.get(key);
-            int value = CNFEval.getTruthValue(truthvals, key);
+            int value = CNFEval.getTruthValue(truthvals, key.intValue());
+            result += "" + value + variable;
             if ((variable.equals("+") && (value == 1)) || 
                 (variable.equals("-") && (value == 0))) 
             {
+                System.out.println(result);
                 return true;
             }
         }
+        System.out.println(result);
         return false;
     }
     
