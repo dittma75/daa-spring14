@@ -56,11 +56,6 @@ public class Parser
         }
     }
     
-    //returns number of variables
-    int getNumberOfVariables(){
-	return numberOfVariables;
-    }
-    
     /* @return given String with no duplicate or
      * leading spaces.  This is the correct format
      * for parsing.
