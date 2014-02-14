@@ -5,8 +5,6 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.Scanner;
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Set;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JFileChooser;
@@ -51,10 +49,6 @@ public class CNFEval
 	
         Parser parser = new Parser(scanner);
         parser.parseFile();
-        for (int i = 0; i < clauses.size(); i++)
-        {
-            System.out.println(clauses.get(i).toString());
-        }
         truthValues = (int) (Math.pow(2, parser.getNumberOfVariables()) - 1);
         boolean satisfiable = evaluate(truthValues);
         System.out.println(satisfiable);
@@ -103,6 +97,6 @@ public class CNFEval
      */
     public static int getTruthValue(int truthValues, int variableNumber)
     {
-        return (truthValues >> variableNumber) & 1;
+        return (truthValues >> variableNumber - 1) & 1;
     }
 }
