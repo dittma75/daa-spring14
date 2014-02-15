@@ -37,10 +37,14 @@ public class Clause
     }
     
     /**
+     * Evaluate each variable of a clause until a variable is
+     * positive and true, a variable is negated and false, or no variable
+     * in the clause fits either of these criteria.
      * @param truthvals the current truth values
      * @return true if this clause evaluates
      * to true.
      */
+    //O(n)
     public boolean evaluate(BigInteger truthvals)
     {
         Set<Integer> keys = variables.keySet();
@@ -60,7 +64,7 @@ public class Clause
     
     /**
      * @return the values of the variables in
-     * this clause delimited by commas.
+     * this clause.
      */
     public String toString()
     {

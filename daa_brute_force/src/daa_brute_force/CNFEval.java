@@ -19,14 +19,14 @@ import java.math.BigInteger;
  */
 public class CNFEval 
 {
-    /**
-     * @param args the command line arguments
-     */
-    
     private static ArrayList<Clause> clauses = new ArrayList<Clause>();
     private static BigInteger truthValues;
     private static Component parent;
     
+    /**Parses a file, evaluates the data given as variables and clauses
+     * for a CNF, and evaluates the CNF for satisfiability.
+     * @param args the command line arguments
+     */
     public static void main(String[] args) 
     {
 	JFileChooser chooser = new JFileChooser();
@@ -50,7 +50,7 @@ public class CNFEval
         Parser parser = new Parser(scanner);
         parser.parseFile();
         truthValues = makeTruthValues(parser.getNumberOfVariables());
-        boolean satisfiable = evaluate(truthValues);
+        boolean satisfiable = evaluateCNF(truthValues);
         System.out.println(satisfiable);
     }
     
@@ -64,12 +64,16 @@ public class CNFEval
         clauses.add(clause);
     }
     
-    /**
-     * Evaluates the current CNF
-     * @param truthvals a map of the current truth values 
-     * @return true if CNF evaluates to true, false otherwise
+    /*
+     * Evaluates the CNF given according to the clauses and variables
+     * parsed from the given file.  If all DNF clauses are true, the CNF is
+     * also true.
+     * @param truthValues the truth values for all variables in the CNF
+     * to be interpreted as a binary integer.
+     * @return true if CNF evaluates to true, false otherwise.
      */
-    private static boolean evaluate(BigInteger truthValues)
+    //O(n^3)
+    private static boolean evaluateCNF(BigInteger truthValues)
     {
         for (BigInteger i = truthValues; 
              i.compareTo(BigInteger.ZERO) > 0;
@@ -83,6 +87,10 @@ public class CNFEval
         return false;
     }
     
+    /* Evaluates each clause until a false clause is found.
+     * If no false clause is found, all DNFs are true.
+     */
+    //O(n^2)
     private static boolean evaluateDNFs(BigInteger truthValues)
     {
         for(Clause clause : clauses)
@@ -94,21 +102,27 @@ public class CNFEval
         }
         return true;
     }
-    /* Information on getting the nth bit from an integer.
-     * http://stackoverflow.com/questions/14145733/how-can-one-read-an-integer-bit-by-bit-in-java
+    
+    /**
+     * @param truthValues a BigInteger that represents the current truth values
+     * for all of the CNF's variables when interpreted as a binary integer.
+     * @param variableNumber the variable whose truth value is to be returned.
+     * @return true if the nth variable is true, which corresponds to the
+     * (n - 1)th bit from the right being set.
      */
-    public static boolean getTruthValue(BigInteger truthValues, int variableNumber)
+    public static boolean getTruthValue(BigInteger truthValues,
+                                        int variableNumber)
     {
         return truthValues.testBit(variableNumber - 1);
     }
     
-    private static BigInteger makeTruthValues(int variableNumber)
+    /* Makes a BigInteger that represents the truth values of all variables
+     * in the CNF when interpreted as a binary integer.
+     * @param numberOfVariables the number of variables in the CNF.
+     * @return a BigInteger that represents the all of the variables being true.
+     */
+    private static BigInteger makeTruthValues(int numberOfVariables)
     {
-        String values = "";
-        for (int i = 0; i < variableNumber; i++)
-        {
-            values += "1";
-        }
-        return new BigInteger(values);
+        return new BigInteger("2").pow(numberOfVariables).subtract(BigInteger.ONE);
     }
 }
