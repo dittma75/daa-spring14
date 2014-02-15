@@ -49,9 +49,11 @@ public class CNFEval
 	
         Parser parser = new Parser(scanner);
         parser.parseFile();
+        long startTime = System.currentTimeMillis();
         truthValues = makeTruthValues(parser.getNumberOfVariables());
         boolean satisfiable = evaluateCNF(truthValues);
         System.out.println(satisfiable);
+        System.out.println(System.currentTimeMillis() - startTime);
     }
     
     /**
