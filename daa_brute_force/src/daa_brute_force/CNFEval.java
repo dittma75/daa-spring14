@@ -23,27 +23,6 @@ public class CNFEval
     private static BigInteger truthValues;
     
     /**
-     * Tests the chosen file, which should be CNF input, to see if
-     * the CNF formula described is satisfiable.
-     * @param args the command line arguments
-     */
-    public static void main(String[] args) 
-    {
-	JFileChooser chooser = new JFileChooser();
-	int returnVal = chooser.showOpenDialog(null);
-	if(returnVal == JFileChooser.APPROVE_OPTION) 
-        {
-	    System.out.println("You chose to open this file: " + 
-                    chooser.getSelectedFile().getName());
-	}
- 
-	File file = chooser.getSelectedFile();
-	    
-        boolean satisfiable = evaluateCNF(file);
-        System.out.println(satisfiable);
-    }
-    
-    /**
      * Evaluates the CNF formula given according to the clauses and variables
      * parsed from the given file.  If all disjunctive clauses are true, 
      * the CNF formula is satisfiable.
@@ -64,8 +43,10 @@ public class CNFEval
         {
 	    Logger.getLogger(CNFEval.class.getName()).log(Level.SEVERE,null,e);
 	}
+        
         Parser parser = new Parser(scanner);
         parser.parseFile();
+        
         long startTime = System.currentTimeMillis();
         /*truthValues represents the truth values for all variables in the CNF
          * when it is interpreted as a binary integer.
@@ -138,5 +119,26 @@ public class CNFEval
     private static BigInteger makeTruthValues(int numVariables)
     {
         return new BigInteger("2").pow(numVariables).subtract(BigInteger.ONE);
+    }
+       
+    /**
+     * Tests the chosen file, which should be CNF input, to see if
+     * the CNF formula described is satisfiable.
+     * @param args the command line arguments
+     */
+    public static void main(String[] args) 
+    {
+	JFileChooser chooser = new JFileChooser();
+	int returnVal = chooser.showOpenDialog(null);
+	if(returnVal == JFileChooser.APPROVE_OPTION) 
+        {
+	    System.out.println("You chose to open this file: " + 
+                    chooser.getSelectedFile().getName());
+	}
+ 
+	File file = chooser.getSelectedFile();
+	    
+        boolean satisfiable = evaluateCNF(file);
+        System.out.println(satisfiable);
     }
 }
