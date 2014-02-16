@@ -1,46 +1,49 @@
 package daa_brute_force;
 
 import java.util.Scanner;
-/**Parses a file from System.in for use in the
+/**
+ * Parses a file from System.in for use in the
  * evaluation of a CNF formula.
  * 
  * @author Kevin Dittmar
+ * @author Jonathan Frederickson
+ * @author Andrew Genova
  */
-public class Parser 
+class Parser 
 {
     private int numberOfVariables;
     private int numberOfClauses;
     private Scanner scanner;
     
     /**
-     * @param Scanner scanner should have
-     * input in the proper format for CNF
+     * @param scanner should have input in the proper format for CNF
      * evaluation.
      */
-    public Parser(Scanner scanner)
+    Parser(Scanner scanner)
     {
         this.scanner = scanner;
     }
     
-    /**
-     * @return number of clauses as given by the
+    /**Gets number of variables in the CNF formula.
+     * @return number of variables as given by the
      * parsed file
      */
-    public int getNumberOfVariables()
+    int getNumberOfVariables()
     {
         return numberOfVariables;
     }
     
-    /**
+    /**Gets number of clauses in the CNF formula.
      * @return number of clauses as given by the
      * parsed file.
      */
-    public int getNumberOfClauses()
+    int getNumberOfClauses()
     {
         return numberOfClauses;
     }
     
-    /**Parse the file on the Scanner as
+    /**
+     * Parse the file on the Scanner as
      * input for CNF evaluation.
      */
     void parseFile()
@@ -56,9 +59,10 @@ public class Parser
         }
     }
     
-    /* @return given String with no duplicate or
-     * leading spaces.  This is the correct format
-     * for parsing.
+    /**Puts the file data in the correct format for
+     * CNF parsing.
+     * @return given String with no duplicate or
+     * leading spaces.
      */
     private String formatInput(String nextLine)
     {
@@ -72,11 +76,13 @@ public class Parser
         return nextLine;
     }
     
-    /* Determines the meaning of each part of
+    /**
+     * Determines the meaning of each part of
      * the input.
-     * Starts with c:       comment to be ignored.
-     * Starts with p cnf:   clause and variable information line.
-     * Otherwise:           data to be used to build clauses.
+     * Lines starting with c are comments to be ignored.
+     * A line starting with p cnf identifies the file as CNFEval input
+     * and will provide the number of clauses and number of variables.
+     * All other lines specify a disjunctive clause to be added.
      */
     private void parseInput(String nextLine)
     {
