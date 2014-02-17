@@ -9,8 +9,8 @@ import java.util.logging.Logger;
 import javax.swing.JFileChooser;
 import java.math.BigInteger;
 /**
- * CNFEval takes a file as input, parses it with the Parser class into Clauses,
- * and tests the Clauses for satisfiability.
+ * CNFEval takes a file as input, parses it with the Parser class into
+ * Clauses, and tests the Clauses for satisfiability.
  * The parsed formula must be in Conjunctive Normal Form (CNF)
  *
  * @author Kevin Dittmar
@@ -35,14 +35,14 @@ public class CNFEval
     public static boolean evaluateCNF(File input)
     {
         Scanner scanner = null;
-	try
+        try
         {
-	    scanner = new Scanner(input);
-	} 
+            scanner = new Scanner(input);
+        } 
         catch (FileNotFoundException e)
         {
-	    Logger.getLogger(CNFEval.class.getName()).log(Level.SEVERE,null,e);
-	}
+            Logger.getLogger(CNFEval.class.getName()).log(Level.SEVERE,null,e);
+        }
         
         Parser parser = new Parser(scanner);
         parser.parseFile();
@@ -128,16 +128,14 @@ public class CNFEval
      */
     public static void main(String[] args) 
     {
-	JFileChooser chooser = new JFileChooser();
-	int returnVal = chooser.showOpenDialog(null);
-	if(returnVal == JFileChooser.APPROVE_OPTION) 
+        JFileChooser chooser = new JFileChooser();
+        int returnVal = chooser.showOpenDialog(null);
+        if(returnVal == JFileChooser.APPROVE_OPTION)
         {
-	    System.out.println("You chose to open this file: " + 
-                    chooser.getSelectedFile().getName());
-	}
- 
-	File file = chooser.getSelectedFile();
-	    
+            System.out.println("You chose to open this file: "
+                    + chooser.getSelectedFile().getName());
+        }
+        File file = chooser.getSelectedFile();
         boolean satisfiable = evaluateCNF(file);
         System.out.println(satisfiable);
     }

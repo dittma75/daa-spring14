@@ -92,7 +92,9 @@ class Parser
         {
             //This is a comment; do nothing.
         }
-        //The next line contains the number of clauses and number of variables.
+        /*The next line contains the number of clauses 
+         *and number of variables.
+         */
         else if (nextLine.startsWith("p cnf "))
         {
             //Remove data input descriptor.
