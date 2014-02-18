@@ -54,8 +54,8 @@ class Clause
         {
             
             boolean value = CNFEval.getTruthValue(truthvals, variable.getID());
-            if ((variable.getPositivity() == true) && (value == true) || 
-                (variable.getPositivity() == false && (value == false))) 
+            if (((variable.getPositivity() == true) && (value == true)) || 
+                ((variable.getPositivity() == false) && (value == false))) 
             {
                 
                 return true;
@@ -65,7 +65,7 @@ class Clause
     }
     
     /**Returns a String representing the variables in this clause and
-     * their corresponding positivity values (POSITIVE or NEGATED).
+     * their corresponding positivity values (true or false).
      * @return the String representation of the values of the variables 
      * in this clause.
      */
