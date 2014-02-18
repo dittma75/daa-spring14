@@ -119,18 +119,18 @@ class Parser
                     /*Adds the variable as false at its position (which is
                      *the second char of the String) in the ArrayList.
                      */
-                    newClause.addVariable(
+                    newClause.addVariable(new Variable(
                             Math.abs(Integer.parseInt(splitLine[i])),
-                            Clause.NEGATED);
+                            false));
                 }
                 else
                 {
                     /*Adds the variable as true at its position (which is
                      *the first char of the String) in the ArrayList.
                      */
-                    newClause.addVariable(
+                    newClause.addVariable(new Variable(
                             Integer.parseInt(splitLine[i]), 
-                            Clause.POSITIVE);
+                            true));
                 }
             }
         }

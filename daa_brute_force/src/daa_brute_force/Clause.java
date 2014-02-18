@@ -1,7 +1,8 @@
 package daa_brute_force;
 
-import java.util.HashMap;
-import java.util.Set;
+//import java.util.HashMap;
+//import java.util.Set;
+import java.util.ArrayList;
 import java.math.BigInteger;
 
 /**
@@ -14,7 +15,8 @@ import java.math.BigInteger;
  */
 class Clause 
 {
-    private HashMap<Integer, String> variables;
+    //private HashMap<Integer, String> variables;
+    private ArrayList<Variable> variables;
     static final String NEGATED = "-";
     static final String POSITIVE = "+";
     /**
@@ -25,7 +27,7 @@ class Clause
      */
     Clause()
     {
-        variables = new HashMap<Integer, String>();
+        variables = new ArrayList<Variable>();
     }
     
     /**
@@ -33,9 +35,9 @@ class Clause
      * @param index the numeric identifier for the variable.
      * @param positivity determines whether the variable is negated or not.
      */
-    void addVariable(int index, String positivity)
+    void addVariable(Variable variable)
     {
-        variables.put(index, positivity);
+        variables.add(variable);
     }
     
     /**
@@ -48,13 +50,12 @@ class Clause
     //O(n)
     boolean evaluate(BigInteger truthvals)
     {
-        Set<Integer> keys = variables.keySet();
-        for (Integer key : keys)
+        for (Variable variable : variables)
         {
-            String variable = variables.get(key);
-            boolean value = CNFEval.getTruthValue(truthvals, key.intValue());
-            if ((variable.equals("+") && (value)) || 
-                (variable.equals("-") && (!value))) 
+            
+            boolean value = CNFEval.getTruthValue(truthvals, variable.getID());
+            if ((variable.getPositivity() == true) && (value == true) || 
+                (variable.getPositivity() == false && (value == false))) 
             {
                 
                 return true;
@@ -70,6 +71,6 @@ class Clause
      */
     public String toString()
     {
-        return variables.entrySet().toString();
+        return variables.toString();
     }
 }
