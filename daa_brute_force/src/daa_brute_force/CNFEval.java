@@ -3,7 +3,6 @@ package daa_brute_force;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.Scanner;
-import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JFileChooser;
@@ -19,9 +18,9 @@ import java.math.BigInteger;
  */
 public class CNFEval 
 {
-//    private static ArrayList<Clause> clauses = new ArrayList<Clause>();
     private static BigInteger truthValues;
     private static int formula[][];
+    
     /**
      * Evaluates the CNF formula given according to the clauses and variables
      * parsed from the given file.  If all disjunctive clauses are true, 
@@ -31,7 +30,6 @@ public class CNFEval
      * @param input the file containing evaluation input in CNF format.
      * @return true if CNF formula is satisfiable, false otherwise.
      */
-    //O(n^3)
     public static boolean evaluateCNF(File input)
     {
         Scanner scanner = null;
@@ -67,8 +65,8 @@ public class CNFEval
     }
     
     /**
-     * Adds a Clause to be considered when testing
-     * the satisfiability.
+     * Adds an int array that represents a clause in the formula to be 
+     * considered when testing the satisfiability.
      * @param clause the Clause to be added.
      */
     static void addClause(int i, int[] clause)
@@ -76,6 +74,12 @@ public class CNFEval
         formula[i] = clause;
     }
     
+    /**
+     * Initializes the formula with the number of clauses.  The second
+     * dimension of the array will be variable length based on the number
+     * of variables in each clause.
+     * @param clauses the number of clauses that make up this formula.
+     */
     static void intializeFormula(int clauses)
     {
         formula = new int[clauses][];
@@ -91,7 +95,7 @@ public class CNFEval
      * (n - 1)th bit from the right being set.
      */
     static boolean getTruthValue(BigInteger truthValues,
-                                        int variableNumber)
+            int variableNumber)
     {
         return truthValues.testBit(variableNumber - 1);
     }
@@ -100,7 +104,6 @@ public class CNFEval
      * Evaluates each clause until a false clause is found.
      * If no false clause is found, all disjunctions are true.
      */
-    //O(n^2)
     private static boolean evaluateDisjunctions(BigInteger truthValues)
     {
         boolean clauseSatisfied;
@@ -114,17 +117,17 @@ public class CNFEval
             }
         }
         return true;
-//        for(Clause clause : clauses)
-//        {
-//            if(clause.evaluate(truthValues) == false)
-//            {
-//                return false;
-//            }
-//        }
-//        return true;
     }
     
-    private static boolean evaluateClause(int clauseNumber, BigInteger truthValues)
+    /**
+     * Evaluate each variable of a clause until a variable is
+     * positive and true, a variable is negated and false, or no variable
+     * in the clause fits either of these criteria.
+     * @param truthValues the current truth values
+     * @return true if this disjunction clause evaluates to true.
+     */
+    private static boolean evaluateClause(int clauseNumber,
+            BigInteger truthValues)
     {
         //Iterates through all variables in clause
         for (int i = 0; i < formula[clauseNumber].length; i++)
@@ -133,8 +136,11 @@ public class CNFEval
              *the variable is negated and has a "false" truth value, so
              *break out of this loop early.
              */
-            if ((formula[clauseNumber][i] > 0 && getTruthValue(truthValues, formula[clauseNumber][i])) ||
-                (formula[clauseNumber][i] < 0 && !(getTruthValue(truthValues, negate(formula[clauseNumber][i])))))
+            if ((formula[clauseNumber][i] > 0 &&
+                 getTruthValue(truthValues, formula[clauseNumber][i])) ||
+                (formula[clauseNumber][i] < 0 &&
+                !(getTruthValue(truthValues,negate(formula[clauseNumber][i]))))
+               )
             {
                 return true;
             }
@@ -142,10 +148,19 @@ public class CNFEval
         return false;
     }
     
+    /**
+     * Use bitwise negation to change a negative value to a positive value
+     * quickly by using one's complement negation and adding 1.
+     * Pre:  Value must be a negative number to be negated correctly.
+     * 
+     * @param value the negative value to be made positive.
+     * @return the positive value of equivalent magnitude to value.
+     */
     private static int negate(int value)
     {
         return ~value + 1;
     }
+    
     /** 
      * Makes a BigInteger that represents the truth values of all variables
      * in the CNF when interpreted as a binary integer.
@@ -153,7 +168,7 @@ public class CNFEval
      * @return a BigInteger that represents the all of the variables
      * being true.
      */
-    private static BigInteger makeTruthValues(int numVariables)
+    static BigInteger makeTruthValues(int numVariables)
     {
         return new BigInteger("2").pow(numVariables).subtract(BigInteger.ONE);
     }
@@ -174,6 +189,13 @@ public class CNFEval
         }
         File file = chooser.getSelectedFile();
         boolean satisfiable = evaluateCNF(file);
-        System.out.println(satisfiable);
+        if (satisfiable)
+        {
+            System.out.println("satisfiable");
+        }
+        else
+        {
+            System.out.println("unsatisfiable");
+        }
     }
 }

@@ -50,7 +50,6 @@ class Parser
     {
         String nextLine = "";
                 
-        //O(n^2)
         while (scanner.hasNextLine())
         {
             nextLine = scanner.nextLine();
@@ -118,23 +117,8 @@ class Parser
                     CNFEval.addClause(clauseCounter, newClause);
                     clauseCounter++;
                 }
-//                else if (splitLine[i].startsWith("-"))
-//                {
-//                    /*Adds the variable as false at its position (which is
-//                     *the second char of the String) in the ArrayList.
-//                     */
-//                    newClause.addVariable(new Variable(
-//                            Math.abs(Integer.parseInt(splitLine[i])),
-//                            false));
-//                }
                 else
                 {
-//                    /*Adds the variable as true at its position (which is
-//                     *the first char of the String) in the ArrayList.
-//                     */
-//                    newClause.addVariable(new Variable(
-//                            Integer.parseInt(splitLine[i]), 
-//                            true));
                     newClause[i] = Integer.parseInt(splitLine[i]);
                 }
             }
