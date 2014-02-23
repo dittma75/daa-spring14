@@ -14,7 +14,7 @@ class Parser
     private int numberOfVariables;
     private int numberOfClauses;
     private Scanner scanner;
-    
+    private int clauseCounter = 0;
     /**
      * @param scanner should have input in the proper format for CNF
      * evaluation.
@@ -87,7 +87,8 @@ class Parser
     private void parseInput(String nextLine)
     {
         String[] splitLine;
-        Clause newClause = new Clause();
+        int[] newClause;
+
         if (nextLine.startsWith("c"))
         {
             //This is a comment; do nothing.
@@ -102,35 +103,39 @@ class Parser
             splitLine = nextLine.split(" ");
             numberOfVariables = Integer.parseInt(splitLine[0]);
             numberOfClauses = Integer.parseInt(splitLine[1]);
+            CNFEval.intializeFormula(numberOfClauses);
         }
         //The next line contains variable assignments.
         else
         {
             splitLine = nextLine.split(" ");
             //O(n)
+            newClause = new int[splitLine.length - 1];
             for (int i = 0; i < splitLine.length; i++)
             {
                 if (Integer.parseInt(splitLine[i]) == 0)
                 {
-                    CNFEval.addClause(newClause);
+                    CNFEval.addClause(clauseCounter, newClause);
+                    clauseCounter++;
                 }
-                else if (splitLine[i].startsWith("-"))
-                {
-                    /*Adds the variable as false at its position (which is
-                     *the second char of the String) in the ArrayList.
-                     */
-                    newClause.addVariable(new Variable(
-                            Math.abs(Integer.parseInt(splitLine[i])),
-                            false));
-                }
+//                else if (splitLine[i].startsWith("-"))
+//                {
+//                    /*Adds the variable as false at its position (which is
+//                     *the second char of the String) in the ArrayList.
+//                     */
+//                    newClause.addVariable(new Variable(
+//                            Math.abs(Integer.parseInt(splitLine[i])),
+//                            false));
+//                }
                 else
                 {
-                    /*Adds the variable as true at its position (which is
-                     *the first char of the String) in the ArrayList.
-                     */
-                    newClause.addVariable(new Variable(
-                            Integer.parseInt(splitLine[i]), 
-                            true));
+//                    /*Adds the variable as true at its position (which is
+//                     *the first char of the String) in the ArrayList.
+//                     */
+//                    newClause.addVariable(new Variable(
+//                            Integer.parseInt(splitLine[i]), 
+//                            true));
+                    newClause[i] = Integer.parseInt(splitLine[i]);
                 }
             }
         }

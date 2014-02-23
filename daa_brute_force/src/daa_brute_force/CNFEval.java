@@ -19,9 +19,9 @@ import java.math.BigInteger;
  */
 public class CNFEval 
 {
-    private static ArrayList<Clause> clauses = new ArrayList<Clause>();
+//    private static ArrayList<Clause> clauses = new ArrayList<Clause>();
     private static BigInteger truthValues;
-    
+    private static int formula[][];
     /**
      * Evaluates the CNF formula given according to the clauses and variables
      * parsed from the given file.  If all disjunctive clauses are true, 
@@ -71,11 +71,15 @@ public class CNFEval
      * the satisfiability.
      * @param clause the Clause to be added.
      */
-    static void addClause(Clause clause)
+    static void addClause(int i, int[] clause)
     {
-        clauses.add(clause);
+        formula[i] = clause;
     }
     
+    static void intializeFormula(int clauses)
+    {
+        formula = new int[clauses][];
+    }
     /**Gets the truth value for a specified variable from truthValues,
      * which represents the truth value of all variables when interpreted as
      * a binary integer.
@@ -99,16 +103,49 @@ public class CNFEval
     //O(n^2)
     private static boolean evaluateDisjunctions(BigInteger truthValues)
     {
-        for(Clause clause : clauses)
+        boolean clauseSatisfied;
+        //Iterates through all clauses in formula
+        for (int i = 0; i < formula.length; i++)
         {
-            if(clause.evaluate(truthValues) == false)
+            clauseSatisfied = evaluateClause(i, truthValues);
+            if (!(clauseSatisfied))
             {
                 return false;
             }
         }
         return true;
+//        for(Clause clause : clauses)
+//        {
+//            if(clause.evaluate(truthValues) == false)
+//            {
+//                return false;
+//            }
+//        }
+//        return true;
     }
     
+    private static boolean evaluateClause(int clauseNumber, BigInteger truthValues)
+    {
+        //Iterates through all variables in clause
+        for (int i = 0; i < formula[clauseNumber].length; i++)
+        {
+            /*The variable is not negated and has a "true" truth value or
+             *the variable is negated and has a "false" truth value, so
+             *break out of this loop early.
+             */
+            if ((formula[clauseNumber][i] > 0 && getTruthValue(truthValues, formula[clauseNumber][i])) ||
+                (formula[clauseNumber][i] < 0 && !(getTruthValue(truthValues, negate(formula[clauseNumber][i])))))
+            {
+                return true;
+            }
+        }
+        return false;
+    }
+    
+    private static int negate(int value)
+    {
+        return ~value + 1;
+    }
     /** 
      * Makes a BigInteger that represents the truth values of all variables
      * in the CNF when interpreted as a binary integer.
