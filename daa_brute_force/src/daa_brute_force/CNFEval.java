@@ -49,7 +49,6 @@ public class CNFEval
         /*truthValues represents the truth values for all variables in the CNF
          * when it is interpreted as a binary integer.
          */
-        truthValues = makeTruthValues(parser.getNumberOfVariables());
         for (BigInteger i = truthValues; 
              i.compareTo(BigInteger.ZERO) > 0;
              i = i.subtract(BigInteger.ONE))
@@ -65,16 +64,6 @@ public class CNFEval
     }
     
     /**
-     * Adds an int array that represents a clause in the formula to be 
-     * considered when testing the satisfiability.
-     * @param clause the Clause to be added.
-     */
-    static void addClause(int i, int[] clause)
-    {
-        formula[i] = clause;
-    }
-    
-    /**
      * Initializes the formula with the number of clauses.  The second
      * dimension of the array will be variable length based on the number
      * of variables in each clause.
@@ -84,25 +73,34 @@ public class CNFEval
     {
         formula = new int[clauses][];
     }
-    /**Gets the truth value for a specified variable from truthValues,
-     * which represents the truth value of all variables when interpreted as
-     * a binary integer.
-     * @param truthValues a BigInteger that represents the current truth 
-     * values for all of the CNF's variables when interpreted as a binary 
-     * integer (0 represents false, and 1 represents true).
-     * @param variableNumber the variable whose truth value is to be returned.
-     * @return true if the nth variable is true, which corresponds to the
-     * (n - 1)th bit from the right being set.
+    
+    /**
+     * Adds an int array that represents a clause in the formula to be 
+     * considered when testing the satisfiability.
+     * @param index the index of the clause in the formula array.
+     * @param clause the Clause to be added.
      */
-    static boolean getTruthValue(BigInteger truthValues,
-            int variableNumber)
+    static void addClause(int index, int[] clause)
     {
-        return truthValues.testBit(variableNumber - 1);
+        formula[index] = clause;
+    }
+    
+    /** 
+     * Initializes truthValues to a BigInteger that represents the truth values
+     * of all variables in the CNF when interpreted as a binary integer.
+     * truthValues starts with all variables being true.
+     * @param numVariables the number of variables in the CNF.
+     */
+    static void makeTruthValues(int numVariables)
+    {
+        truthValues = 
+                new BigInteger("2").pow(numVariables).subtract(BigInteger.ONE);
     }
     
     /** 
      * Evaluates each clause until a false clause is found.
      * If no false clause is found, all disjunctions are true.
+     * @param truthValues the current truthValue to use for evaluation.
      */
     private static boolean evaluateDisjunctions(BigInteger truthValues)
     {
@@ -123,6 +121,8 @@ public class CNFEval
      * Evaluate each variable of a clause until a variable is
      * positive and true, a variable is negated and false, or no variable
      * in the clause fits either of these criteria.
+     * @param clauseNumber the index of the clause in the formula to be
+     * evaluated.
      * @param truthValues the current truth values
      * @return true if this disjunction clause evaluates to true.
      */
@@ -148,9 +148,29 @@ public class CNFEval
         return false;
     }
     
+    /**Gets the truth value for a specified variable from truthValues,
+     * which represents the truth value of all variables when interpreted as
+     * a binary integer.
+     * @param truthValues a BigInteger that represents the current truth 
+     * values for all of the CNF's variables when interpreted as a binary 
+     * integer (0 represents false, and 1 represents true).
+     * @param variableNumber the variable whose truth value is to be returned.
+     * @return true if the nth variable is true, which corresponds to the
+     * (n - 1)th bit from the right being set.
+     */
+    private static boolean getTruthValue(BigInteger truthValues,
+            int variableNumber)
+    {
+        return truthValues.testBit(variableNumber - 1);
+    }
+    
     /**
      * Use bitwise negation to change a negative value to a positive value
      * quickly by using one's complement negation and adding 1.
+     * This operation was faster than Math.abs() in test runs.  It is
+     * applicable because this class only requires negative numbers to
+     * be turned into positive numbers of an equivalent magnitude for array
+     * indexing purposes.
      * Pre:  Value must be a negative number to be negated correctly.
      * 
      * @param value the negative value to be made positive.
@@ -159,18 +179,6 @@ public class CNFEval
     private static int negate(int value)
     {
         return ~value + 1;
-    }
-    
-    /** 
-     * Makes a BigInteger that represents the truth values of all variables
-     * in the CNF when interpreted as a binary integer.
-     * @param numVariables the number of variables in the CNF.
-     * @return a BigInteger that represents the all of the variables
-     * being true.
-     */
-    static BigInteger makeTruthValues(int numVariables)
-    {
-        return new BigInteger("2").pow(numVariables).subtract(BigInteger.ONE);
     }
        
     /**

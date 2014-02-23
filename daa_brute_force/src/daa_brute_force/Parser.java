@@ -11,8 +11,6 @@ import java.util.Scanner;
  */
 class Parser 
 {
-    private int numberOfVariables;
-    private int numberOfClauses;
     private Scanner scanner;
     private int clauseCounter = 0;
     /**
@@ -22,24 +20,6 @@ class Parser
     Parser(Scanner scanner)
     {
         this.scanner = scanner;
-    }
-    
-    /**Gets number of variables in the CNF formula.
-     * @return number of variables as given by the
-     * parsed file
-     */
-    int getNumberOfVariables()
-    {
-        return numberOfVariables;
-    }
-    
-    /**Gets number of clauses in the CNF formula.
-     * @return number of clauses as given by the
-     * parsed file.
-     */
-    int getNumberOfClauses()
-    {
-        return numberOfClauses;
     }
     
     /**
@@ -100,9 +80,10 @@ class Parser
             //Remove data input descriptor.
             nextLine = nextLine.replace("p cnf ", "");
             splitLine = nextLine.split(" ");
-            numberOfVariables = Integer.parseInt(splitLine[0]);
-            numberOfClauses = Integer.parseInt(splitLine[1]);
+            int numberOfVariables = Integer.parseInt(splitLine[0]);
+            int numberOfClauses = Integer.parseInt(splitLine[1]);
             CNFEval.intializeFormula(numberOfClauses);
+            CNFEval.makeTruthValues(numberOfVariables);
         }
         //The next line contains variable assignments.
         else
