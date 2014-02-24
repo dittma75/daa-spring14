@@ -1,3 +1,5 @@
+/* Kevin Dittmar, Jonathan Frederickson, and Andrew Genova
+ * Design and Analysis of Algorithms Brute Force */
 package daa_brute_force;
 
 import java.io.File;
