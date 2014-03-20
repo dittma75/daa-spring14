@@ -4,50 +4,49 @@ package dp_solver;
  *
  * @author Kevin Dittmar
  */
-public class DP_solver {
-
-	
-	// Students will define class Formula, possibly as 
-	// a separate public class
-	private class Formula { }
+public class DP_solver
+{
 
 	Formula formula;
 
 	// Read the provided input formula
-	void readFormula ( String fileName ) {
+	void readFormula ( String fileName ) 
+        {
 		// Stub
 		formula = null;
 		
 	}
 
 	// Returns true if the formula has an empty clause, false otherwise
-	boolean hasEmptyClause ( Formula f ) {
-		// Stub
-		return false;
+	boolean hasEmptyClause ( Formula f ) 
+        {
+		return f.hasEmptyClause();
 	}
 	
 	// Returns true if the formula has no clauses left, false otherwise
-	boolean isEmpty ( Formula f ) {
-		// Stub
-		return false;
-		
+	boolean isEmpty ( Formula f ) 
+        {
+		return f.isEmpty();
 	}
 	
 	// Return branch variable.
-	int selectBranchVar ( Formula f ) {
+	int selectBranchVar ( Formula f ) 
+        {
 		// Stub
 		return 0;
 	}
 	
 	// Set given variable to given true/false value
 	// Variable value may be positive or negative
-	void setVar ( int var, Formula f, boolean tf) {
+	void setVar ( int var, Formula f, boolean tf) 
+        {
 		// Stub
 		
 	}
 	
 	// Set given variable to "unassigned" in the given formula
-	void unset ( int var, Formula f) {
+	void unset ( int var, Formula f) 
+        {
 		// Stub
 		
 	}
@@ -68,7 +67,8 @@ public class DP_solver {
 				
 	}
 	
- 	public void solve ( String fileName ) {
+ 	public void solve ( String fileName ) 
+        {
  		
 		readFormula ( fileName );
 		
@@ -80,7 +80,8 @@ public class DP_solver {
 	}
 	
  	// Recursive backtracking solution
-	boolean dp ( Formula formula ) {
+	boolean dp ( Formula formula ) 
+        {
 		
 		
 		if (isEmpty(formula)) // First base case: solution found
@@ -121,10 +122,11 @@ public class DP_solver {
 	}
 	
 
-	public static void main(String[] args) {
+	public static void main(String[] args) 
+        {
 		
 		if (args.length < 1) {
-			System.err.println ("Usage: java dpsolver_skeleton cnf-formula");
+			System.err.println ("Usage: java DP_solver cnf-formula");
 			System.exit(0);
 		}
 		
