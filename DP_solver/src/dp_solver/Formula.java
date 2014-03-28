@@ -1,27 +1,54 @@
 package dp_solver;
-import java.util.LinkedList;
+
+import java.util.Arrays;
+
 /**
  *
  * @author Kevin Dittmar
  */
 public class Formula
 {        
-    private LinkedList<Clause> clauses;
+    private int[][] formula;
+    private int truth_values[];
+    private int current_truth_value;
+    private static final int UNSET = -1;
+    private static final int FALSE = 0;
+    private static final int TRUE = 1;
+    
     public Formula()
     {
-        clauses = new LinkedList<Clause>();
+        current_truth_value = 0;
     }
     
+    /**
+     * Tests all of the clauses in the formula to see if they are satisfied.
+     * @return true if all clauses are satisfied.
+     */
     boolean isEmpty()
     {
-        return clauses.isEmpty();
+        for (int clause = 0; clause < formula.length; clause++)
+        {
+            if (!clauseSatisfied(clause))
+            {
+                return false;
+            }
+        }
+        return true;
     }
     
-    boolean hasEmptyClause()
+    /**
+     * Tests a clause to see if it is satisfied.  A satisfied clause will have
+     * one variable set to TRUE (1).  Variables can be UNSET (-1).
+     * @param clause the index of the clause in formula to be tested.
+     * @return true if the clause is satisfied, which means it has at least
+     * one true variable.
+     */
+    private boolean clauseSatisfied(int clause)
     {
-        for (Clause clause : clauses)
+        for (int var = 0; var < formula[clause].length; var++)
         {
-            if (clause.isEmpty())
+            if ((truth_values[var] == TRUE && formula[clause][var] > 0) ||
+                (truth_values[var] == FALSE && formula[clause][var] < 0))
             {
                 return true;
             }
@@ -29,13 +56,90 @@ public class Formula
         return false;
     }
     
-    public void addClause(Clause clause)
+    /**
+     * Tests each clause in the formula to see if it's a dead end.  If one
+     * clause is a dead end, then the formula has a dead-end clause.
+     * @return true if the formula has a dead-end clause.
+     */
+    boolean hasDeadEndClause()
     {
-        clauses.add(clause);
+        for (int clause = 0; clause < formula.length; clause++)
+        {
+            if (clauseDeadEnd(clause))
+            {
+                return true;
+            }
+        }
+        return false;
     }
     
-    public boolean removeClause(Clause clause)
+    /**
+     * Tests a clause to see if it is a dead end.  An dead-end clause will have
+     * all of its variables set to FALSE (0).  None of its variables can be
+     * TRUE (1) or UNSET (-1).
+     * @param clause the index of the clause in formula to be tested.
+     * @return true if all variables in a clause are FALSE (0). 
+     */
+    private boolean clauseDeadEnd(int clause)
     {
-        return clauses.remove(clause);
+        for (int var = 0; var < formula[clause].length; var++)
+        {
+            if ((truth_values[var] == TRUE && formula[clause][var] > 0) ||
+                (truth_values[var] == FALSE && formula[clause][var] < 0) ||
+                (truth_values[var] == UNSET))
+            {
+                return false;
+            }
+        }
+        return true;
+    }
+    
+    /**
+     * Initializes the formula with the number of clauses.  The second
+     * dimension of the array will be variable length based on the number
+     * of variables in each clause.
+     * @param clauses the number of clauses that make up this formula.
+     */
+    void intializeFormula(int clauses)
+    {
+        formula = new int[clauses][];
+    }
+    
+    /**
+     * Adds an int array that represents a clause in the formula to be 
+     * considered when testing the satisfiability.
+     * @param index the index of the clause in the formula array.
+     * @param clause the Clause to be added.
+     */
+    void addClause(int index, int[] clause)
+    {
+        formula[index] = clause;
+    }
+    
+
+    void makeTruthValues(int num_variables)
+    {
+        truth_values = new int[num_variables];
+        Arrays.fill(truth_values, UNSET);
+        
+    }
+    
+    void unsetTruthValue(int variable)
+    {
+        truth_values[variable] = UNSET;
+        current_truth_value--;
+    }
+    
+    void setTruthValue(int variable, boolean value)
+    {
+        if (value)
+        {
+            truth_values[variable] = TRUE;
+        }
+        else
+        {
+            truth_values[variable] = FALSE;
+        }
+        current_truth_value++;
     }
 }

@@ -1,26 +1,26 @@
 package dp_solver;
 
+import java.io.File;
+
 /**
  *
  * @author Kevin Dittmar
  */
 public class DP_solver
 {
-
 	Formula formula;
-
 	// Read the provided input formula
 	void readFormula ( String fileName ) 
         {
-		// Stub
-		formula = null;
-		
+                File input = new File(fileName);
+		Parser parser = new Parser(input);
+		formula = parser.parseFile();		
 	}
 
 	// Returns true if the formula has an empty clause, false otherwise
 	boolean hasEmptyClause ( Formula f ) 
         {
-		return f.hasEmptyClause();
+		return f.hasDeadEndClause();
 	}
 	
 	// Returns true if the formula has no clauses left, false otherwise
@@ -40,14 +40,13 @@ public class DP_solver
 	// Variable value may be positive or negative
 	void setVar ( int var, Formula f, boolean tf) 
         {
-		// Stub
-		
+		f.setTruthValue(var, tf);		
 	}
 	
 	// Set given variable to "unassigned" in the given formula
 	void unset ( int var, Formula f) 
         {
-		// Stub
+		f.unsetTruthValue(var);
 		
 	}
 
@@ -66,7 +65,7 @@ public class DP_solver
 		System.out.println ("Formula is unsatisfiable");
 				
 	}
-	
+        
  	public void solve ( String fileName ) 
         {
  		
@@ -86,7 +85,7 @@ public class DP_solver
 		
 		if (isEmpty(formula)) // First base case: solution found
 			return true;
-		else if (hasEmptyClause (formula)) // Second base case: dead end found
+		else if (hasEmptyClause(formula)) // Second base case: dead end found
 			return false;
 		else {
 			
@@ -129,7 +128,7 @@ public class DP_solver
 			System.err.println ("Usage: java DP_solver cnf-formula");
 			System.exit(0);
 		}
-		
+                
 		// Insert timing code here...
 		new DP_solver().solve ( args[0] );
 
