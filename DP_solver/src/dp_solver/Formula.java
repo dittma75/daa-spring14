@@ -116,20 +116,34 @@ public class Formula
         formula[index] = clause;
     }
     
-
+    /**
+     * Takes number of variables and sizes the array 'truth_values'
+     * accordingly and assigns them to 'UNSET'.
+     * @param num_variables number of variables in clause 
+     */
     void makeTruthValues(int num_variables)
     {
         truth_values = new int[num_variables];
         Arrays.fill(truth_values, UNSET);
         
     }
-    
+    /**
+     * Changes the truth value of particular variable to be
+     * unset.
+     * @param variable the truth value to be unset
+     */
     void unsetTruthValue(int variable)
     {
         truth_values[variable] = UNSET;
         current_truth_value--;
     }
-    
+    /**
+     * Takes a boolean variable and if 'true', then it
+     * sets the truth value of that variable to 'true'.
+     * Otherwise 'false'.
+     * @param variable the variable to set
+     * @param value the boolean value to set
+     */
     void setTruthValue(int variable, boolean value)
     {
         if (value)
