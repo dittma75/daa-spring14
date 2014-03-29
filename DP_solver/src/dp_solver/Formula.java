@@ -9,7 +9,7 @@ import java.util.Arrays;
 public class Formula
 {        
     private int[][] formula;
-    private int truth_values[];
+    int truth_values[];
     private int current_truth_value;
     private static final int UNSET = -1;
     private static final int FALSE = 0;
@@ -141,5 +141,21 @@ public class Formula
             truth_values[variable] = FALSE;
         }
         current_truth_value++;
+    }
+    
+    @Override
+    public String toString()
+    {
+        String result = "";
+        for (int i = 0; i < formula.length; i++)
+        {
+            result += "[";
+            for (int j = 0; j < formula[i].length; j++)
+            {
+                result += " " + formula[i][j] + " ";
+            }
+            result += "]\n";
+        }
+        return result;
     }
 }
