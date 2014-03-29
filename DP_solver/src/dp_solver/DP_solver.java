@@ -10,7 +10,12 @@ import java.util.Arrays;
 public class DP_solver
 {
     Formula formula;
-    // Read the provided input formula
+    
+    /**
+     * Takes fileName, makes in input file with the given fileName
+     * and then parses the input. 
+     * @param fileName Filename given at command line
+     */
     void readFormula ( String fileName ) 
     {
         File input = new File(fileName);
@@ -18,13 +23,21 @@ public class DP_solver
         formula = parser.parseFile();		
     }
 
-    // Returns true if the formula has an empty clause, false otherwise
+    /**
+     * Returns true if the formula has an empty clause, false otherwise.
+     * @param f is the formula passed to be checked
+     * @return true if it contains an empty clause, false otherwise.
+     */
     boolean hasEmptyClause ( Formula f ) 
     {
         return f.hasDeadEndClause();
     }
 
-    // Returns true if the formula has no clauses left, false otherwise
+    /**
+     * Returns true if the formula has no clauses left, false otherwise.
+     * @param f is the formula passed to be checked
+     * @return true if all clauses in formula are satisfied. False otherwise.
+     */
     boolean isEmpty ( Formula f ) 
     {
         return f.isEmpty();
@@ -37,21 +50,33 @@ public class DP_solver
         return 0;
     }
 
-    // Set given variable to given true/false value
-    // Variable value may be positive or negative
+    /**
+     * Set given variable to given true/false value.
+     * Variable value may be positive or negative.
+     * @param var the variable to be set
+     * @param f the given formula
+     * @param tf the boolean value to be set
+     */
     void setVar ( int var, Formula f, boolean tf) 
     {
         f.setTruthValue(var, tf);		
     }
 
-    // Set given variable to "unassigned" in the given formula
+    /**
+     * Set given variable to "unassigned" in the given formula.
+     * @param var the variable to be unassigned
+     * @param f the given formula
+     */
     void unset ( int var, Formula f) 
     {
         f.unsetTruthValue(var);
 
     }
 
-    // Formula is satisfiable
+    /**
+     * Prints out Formula is satisfiable
+     * @param f the satisfiable formula
+     */
     void success (Formula f) {
         // Stub		
         System.out.println ( "Formula is satisfiable");
@@ -59,13 +84,20 @@ public class DP_solver
         // Print satisfying assignment
     }
 
-    // Formula is unsatisfiable
+    /**
+     * Formula is unsatisfiable
+     * @param f the unsatisfiable formula
+     */
     void failure (Formula f) {
         // Stub		
         System.out.println ("Formula is unsatisfiable");
 
     }
 
+    /**
+     * 
+     * @param fileName 
+     */
     public void solve ( String fileName ) 
     {
         readFormula ( fileName );
@@ -79,7 +111,11 @@ public class DP_solver
 
     }
 
-    // Recursive backtracking solution
+    /**
+     * Recursive backtracking solution
+     * @param formula the given formula
+     * @return false if branch does not work
+     */
     boolean dp ( Formula formula ) 
     {
         if (isEmpty(formula)) // First base case: solution found
