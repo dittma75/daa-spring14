@@ -1,7 +1,6 @@
 package dp_solver;
 
 import java.io.File;
-import javax.swing.JFileChooser;
 
 /**
  *
@@ -10,10 +9,10 @@ import javax.swing.JFileChooser;
 public class DP_solver
 {
 	Formula formula;
-	
 	// Read the provided input formula
-	void readFormula ( File input ) 
+	void readFormula ( String fileName ) 
         {
+                File input = new File(fileName);
 		Parser parser = new Parser(input);
 		formula = parser.parseFile();		
 	}
@@ -67,10 +66,10 @@ public class DP_solver
 				
 	}
         
- 	public void solve ( File input ) 
+ 	public void solve ( String fileName ) 
         {
  		
-		readFormula ( input );
+		readFormula ( fileName );
 		
 		if (dp ( formula ) )
 			success ( formula );
@@ -124,21 +123,14 @@ public class DP_solver
 
 	public static void main(String[] args) 
         {
-	     JFileChooser chooser = new JFileChooser();
-	     int returnVal = chooser.showOpenDialog(null);
-	     if(returnVal == JFileChooser.APPROVE_OPTION){
-		 System.out.println("You chose to open this file: " + chooser.getSelectedFile().getName());
-	     }
-	     
-	     File input = chooser.getSelectedFile();
 		
-//		if (args.length < 1) {
-//			System.err.println ("Usage: java DP_solver cnf-formula");
-//			System.exit(0);
-//		}
+		if (args.length < 1) {
+			System.err.println ("Usage: java DP_solver cnf-formula");
+			System.exit(0);
+		}
                 
 		// Insert timing code here...
-		new DP_solver().solve (input); //pulled out args[0]
+		new DP_solver().solve ( args[0] );
 
 	}
 }
