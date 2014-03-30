@@ -218,6 +218,7 @@ public class Formula
         }
         return result;
     }
+<<<<<<< HEAD
     /**
      * Prints the Formula in this format:
      * [-1 2 3]
@@ -225,6 +226,8 @@ public class Formula
      * [-2 -4 3]
      * @return the Formula, as a String
      */
+=======
+>>>>>>> 0821236bdd98dab41b0551cc3e678024be6d8636
     @Override
     public String toString()
     {
