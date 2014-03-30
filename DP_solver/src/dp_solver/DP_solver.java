@@ -46,8 +46,7 @@ public class DP_solver
     // Return branch variable.
     int selectBranchVar ( Formula f ) 
     {
-        // Stub
-        return 0;
+        return f.getNextVariable();
     }
 
     /**
@@ -102,8 +101,8 @@ public class DP_solver
     {
         readFormula ( fileName );
 
-        System.out.println(formula);
-        System.out.println(Arrays.toString(formula.truth_values));
+        //System.out.println(formula);
+        //System.out.println(Arrays.toString(formula.truth_values));
         if (dp ( formula ) )
             success ( formula );
         else
@@ -122,7 +121,8 @@ public class DP_solver
             return true;
         else if (hasEmptyClause(formula)) // Second base case: dead end found
             return false;
-        else {
+        else 
+        {
             // Pick a branch variable
             int var = selectBranchVar ( formula );
 
@@ -144,7 +144,8 @@ public class DP_solver
 
                 if (dp (formula))
                     return true;
-                else {
+                else 
+                {
                     // Neither true nor false worked, so unset the branch 
                     // variable and head back
                     unset ( var, formula );

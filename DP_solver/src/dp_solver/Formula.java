@@ -1,5 +1,6 @@
 package dp_solver;
 
+import static java.lang.Math.abs;
 import java.util.Arrays;
 
 /**
@@ -9,15 +10,15 @@ import java.util.Arrays;
 public class Formula
 {        
     private int[][] formula;
-    int truth_values[];
-    private int current_truth_value;
+    private int truth_values[];
+    private int current_variable;
     private static final int UNSET = -1;
     private static final int FALSE = 0;
     private static final int TRUE = 1;
     
     public Formula()
     {
-        current_truth_value = 0;
+        current_variable = 0;
     }
     
     /**
@@ -45,10 +46,11 @@ public class Formula
      */
     private boolean clauseSatisfied(int clause)
     {
-        for (int var = 0; var < formula[clause].length; var++)
+        for (int var_index = 0; var_index < formula[clause].length; var_index++)
         {
-            if ((truth_values[var] == TRUE && formula[clause][var] > 0) ||
-                (truth_values[var] == FALSE && formula[clause][var] < 0))
+            int variable = getVariableNumber(clause, var_index);
+            if ((getTruthValue(variable) == TRUE && variable > 0) ||
+                (getTruthValue(variable) == FALSE && variable < 0))
             {
                 return true;
             }
@@ -82,11 +84,12 @@ public class Formula
      */
     private boolean clauseDeadEnd(int clause)
     {
-        for (int var = 0; var < formula[clause].length; var++)
-        {
-            if ((truth_values[var] == TRUE && formula[clause][var] > 0) ||
-                (truth_values[var] == FALSE && formula[clause][var] < 0) ||
-                (truth_values[var] == UNSET))
+        for (int var_index = 0; var_index < formula[clause].length; var_index++)
+        {           
+            int variable = getVariableNumber(clause, var_index);
+            if ((getTruthValue(variable) == TRUE && variable > 0) ||
+                (getTruthValue(variable) == FALSE && variable < 0) ||
+                (getTruthValue(variable) == UNSET))
             {
                 return false;
             }
@@ -118,8 +121,10 @@ public class Formula
     
     /**
      * Takes number of variables and sizes the array 'truth_values'
-     * accordingly and assigns them to 'UNSET'.
-     * @param num_variables number of variables in clause 
+     * accordingly and assigns them to 'UNSET'.  The array is created
+     * with one extra value so index 0 is not used, since there is no
+     * variable 0.
+     * @param num_variables number of variables in clause. 
      */
     void makeTruthValues(int num_variables)
     {
@@ -135,7 +140,7 @@ public class Formula
     void unsetTruthValue(int variable)
     {
         truth_values[variable] = UNSET;
-        current_truth_value--;
+        current_variable--;
     }
     /**
      * Takes a boolean variable and if 'true', then it
@@ -154,7 +159,12 @@ public class Formula
         {
             truth_values[variable] = FALSE;
         }
-        current_truth_value++;
+        current_variable++;
+    }
+    
+    int getNextVariable()
+    {
+        return current_variable;
     }
     
     @Override
@@ -171,5 +181,23 @@ public class Formula
             result += "]\n";
         }
         return result;
+    }
+    
+    private int getVariableNumber(int clause, int var_index)
+    {
+        return formula[clause][var_index];
+    }
+    
+    /**Get the truth value for the corresponding variable.
+     * The variable may or may not be negative, and the value will be
+     * one greater than its index in the truth_values array.  This is
+     * because truth_value indices start at 0, and variable numbers start at 1.
+     * 
+     * @param variable
+     * @return 
+     */
+    private int getTruthValue(int variable)
+    {
+        return truth_values[abs(variable) - 1];
     }
 }
