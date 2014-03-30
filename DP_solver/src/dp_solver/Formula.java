@@ -194,6 +194,13 @@ public class Formula
         return result;
     }
     
+    /**
+     * Prints the Formula in this format:
+     * [-1 2 3]
+     * [3 1 4]
+     * [-2 -4 3]
+     * @return the Formula, as a String
+     */
     @Override
     public String toString()
     {

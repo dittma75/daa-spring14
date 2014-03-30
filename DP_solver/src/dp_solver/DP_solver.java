@@ -73,7 +73,7 @@ public class DP_solver
     }
 
     /**
-     * Prints out Formula is satisfiable
+     * Prints that Formula is satisfiable, along with its solution
      * @param f the satisfiable formula
      */
     void success (Formula f) {	
@@ -92,7 +92,7 @@ public class DP_solver
     }
 
     /**
-     * 
+     * Calls dp() to solve and prints success or failure status
      * @param fileName 
      */
     public void solve ( String fileName ) 
@@ -151,7 +151,10 @@ public class DP_solver
         }	
     }
 
-
+    /**
+     * Main method - solves the file passed to it as a parameter
+     * @param args 
+     */
     public static void main(String[] args) 
     {
 
