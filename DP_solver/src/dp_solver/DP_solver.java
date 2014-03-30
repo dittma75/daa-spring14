@@ -2,9 +2,12 @@ package dp_solver;
 
 import java.io.File;
 
-/**
- *
+/**DP_solver attempts to satisfy a Conjunctive Normal Form formula
+ * with the Davis-Putnam backtracking algorithm.
+ * 
  * @author Kevin Dittmar
+ * @author Jonathan Frederickson
+ * @author Andrew Genova
  */
 public class DP_solver
 {
@@ -42,7 +45,11 @@ public class DP_solver
         return f.isEmpty();
     }
 
-    // Return branch variable.
+    /** 
+     * Select the next variable to be set.
+     * @param f is the formula whose variable is to be selected.
+     * @return branch variable.
+     */
     int selectBranchVar ( Formula f ) 
     {
         return f.getNextVariable();
@@ -152,7 +159,7 @@ public class DP_solver
 
     /**
      * Main method - solves the file passed to it as a parameter
-     * @param args 
+     * @param args contains the file with the cnf-formula in index 0
      */
     public static void main(String[] args) 
     {
