@@ -76,11 +76,9 @@ public class DP_solver
      * Prints out Formula is satisfiable
      * @param f the satisfiable formula
      */
-    void success (Formula f) {
-        // Stub		
-        System.out.println ( "Formula is satisfiable");
-
-        // Print satisfying assignment
+    void success (Formula f) {	
+        System.out.println("Formula is satisfiable");
+        System.out.println(f.getSolution());
     }
 
     /**
@@ -101,8 +99,6 @@ public class DP_solver
     {
         readFormula ( fileName );
 
-        //System.out.println(formula);
-        //System.out.println(Arrays.toString(formula.truth_values));
         if (dp ( formula ) )
             success ( formula );
         else
@@ -159,7 +155,8 @@ public class DP_solver
     public static void main(String[] args) 
     {
 
-        if (args.length < 1) {
+        if (args.length < 1) 
+        {
             System.err.println ("Usage: java DP_solver cnf-formula");
             System.exit(0);
         }

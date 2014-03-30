@@ -5,6 +5,8 @@ import java.io.FileNotFoundException;
 import java.util.Scanner;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import java.util.ArrayList;
+
 /**
  * Parses a file from System.in for use in the
  * evaluation of a CNF formula.
@@ -42,13 +44,14 @@ class Parser
     Formula parseFile()
     {
         String nextLine = "";
-                
+        String file_string = "";
         while (scanner.hasNextLine())
         {
             nextLine = scanner.nextLine();
-            nextLine = formatInput(nextLine);
-            parseInput(nextLine);
+            file_string += formatInput(nextLine);
         }
+        file_string = file_string.replaceAll("  *", " ");
+        parseInput(file_string);
         return formula;
     }
     
@@ -66,7 +69,22 @@ class Parser
         {
             nextLine = nextLine.replaceFirst(" ", "");
         }
-        return nextLine;
+        if (nextLine.startsWith("c"))
+        {
+            return " ";
+        }
+        else if (nextLine.startsWith("p cnf "))
+        {
+            //Remove data input descriptor.
+            nextLine = nextLine.replace("p cnf ", "");
+            String[] split_line = nextLine.split(" ");
+            int numberOfVariables = Integer.parseInt(split_line[0]);
+            int numberOfClauses = Integer.parseInt(split_line[1]);
+            formula.intializeFormula(numberOfClauses);
+            formula.makeTruthValues(numberOfVariables);
+            return " ";
+        }
+        return nextLine + " ";
     }
     
     /**
@@ -77,45 +95,28 @@ class Parser
      * and will provide the number of clauses and number of variables.
      * All other lines specify a disjunctive clause to be added.
      */
-    private void parseInput(String nextLine)
+    private void parseInput(String file_string)
     {
-        String[] splitLine;
-        int[] newClause;
-
-        if (nextLine.startsWith("c"))
+        ArrayList<Integer> temp_clause = new ArrayList<Integer>();
+        scanner = new Scanner(file_string);
+        
+        while (scanner.hasNextInt())
         {
-            //This is a comment; do nothing.
-        }
-        /*The next line contains the number of clauses 
-         *and number of variables.
-         */
-        else if (nextLine.startsWith("p cnf "))
-        {
-            //Remove data input descriptor.
-            nextLine = nextLine.replace("p cnf ", "");
-            splitLine = nextLine.split(" ");
-            int numberOfVariables = Integer.parseInt(splitLine[0]);
-            int numberOfClauses = Integer.parseInt(splitLine[1]);
-            formula.intializeFormula(numberOfClauses);
-            formula.makeTruthValues(numberOfVariables);
-        }
-        //The next line contains variable assignments.
-        else
-        {
-            splitLine = nextLine.split(" ");
-            //O(n)
-            newClause = new int[splitLine.length - 1];
-            for (int i = 0; i < splitLine.length; i++)
+            int next_int = scanner.nextInt();
+            if (next_int == 0)
             {
-                if (Integer.parseInt(splitLine[i]) == 0)
+                int[] new_clause = new int [temp_clause.size()];
+                for (int i = 0; i < temp_clause.size(); i++)
                 {
-                    formula.addClause(clauseCounter, newClause);
-                    clauseCounter++;
+                    new_clause[i] = temp_clause.get(i);
                 }
-                else
-                {
-                    newClause[i] = Integer.parseInt(splitLine[i]);
-                }
+                temp_clause = new ArrayList<Integer>();
+                formula.addClause(clauseCounter, new_clause);
+                clauseCounter++;
+            }
+            else
+            {
+                temp_clause.add(next_int);
             }
         }
     }

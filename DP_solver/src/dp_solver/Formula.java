@@ -167,6 +167,33 @@ public class Formula
         return current_variable;
     }
     
+    /**
+     * Pre:  formula must be solved for solution to be correct.
+     * @return 
+     */
+    public String getSolution()
+    {
+        String result = "[";
+        for (int i = 0; i < truth_values.length; i++)
+        {
+            result += (i + 1) + "=";
+            if (truth_values[i] == 1)
+            {
+                result += "TRUE";
+            }
+            else
+            {
+                result += "FALSE";
+            }
+            if (i < truth_values.length - 1)
+            {
+                result += ", ";
+            }
+        }
+        result += "]";
+        return result;
+    }
+    
     @Override
     public String toString()
     {
