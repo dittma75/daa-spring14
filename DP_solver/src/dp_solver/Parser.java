@@ -8,7 +8,7 @@ import java.util.logging.Logger;
 import java.util.ArrayList;
 
 /**
- * Parses a file from System.in for use in the
+ * Parses a file for use in the
  * evaluation of a CNF formula.
  * 
  * @author Kevin Dittmar

@@ -12,7 +12,7 @@ public class Formula
     private int[][] formula;
     private int truth_values[];
     private int current_variable;
-    int[] satisfied_clauses;
+    private int[] satisfied_clauses;
     private static final int UNSET = -1;
     private static final int FALSE = 0;
     private static final int TRUE = 1;
@@ -38,34 +38,6 @@ public class Formula
         return true;
     }
     
-    /**
-     * Tests a clause to see if it is satisfied.  A satisfied clause will have
-     * one variable set to TRUE (1).  Variables can be UNSET (-1).
-     * @param clause the index of the clause in formula to be tested.
-     * @return true if the clause is satisfied, which means it has at least
-     * one true variable.
-     */
-    private boolean clauseSatisfied(int clause)
-    {
-        for (int var_index = 0; var_index < formula[clause].length; var_index++)
-        {
-            if (satisfied_clauses[clause] != 0)
-            {
-                return true;
-            }
-            else
-            {
-                int variable = getVariableNumber(clause, var_index);
-                if ((getTruthValue(variable) == TRUE && variable > 0) ||
-                    (getTruthValue(variable) == FALSE && variable < 0))
-                {
-                    satisfied_clauses[clause] = abs(variable);
-                    return true;
-                }
-            }
-        }
-        return false;
-    }
     
     /**
      * Tests each clause in the formula to see if it's a dead end.  If one
@@ -82,28 +54,6 @@ public class Formula
             }
         }
         return false;
-    }
-    
-    /**
-     * Tests a clause to see if it is a dead end.  An dead-end clause will have
-     * all of its variables set to FALSE (0).  None of its variables can be
-     * TRUE (1) or UNSET (-1).
-     * @param clause the index of the clause in formula to be tested.
-     * @return true if all variables in a clause are FALSE (0). 
-     */
-    private boolean clauseDeadEnd(int clause)
-    {
-        for (int var_index = 0; var_index < formula[clause].length; var_index++)
-        {           
-            int variable = getVariableNumber(clause, var_index);
-            if ((getTruthValue(variable) == TRUE && variable > 0) ||
-                (getTruthValue(variable) == FALSE && variable < 0) ||
-                (getTruthValue(variable) == UNSET))
-            {
-                return false;
-            }
-        }
-        return true;
     }
     
     /**
@@ -201,24 +151,6 @@ public class Formula
         return result;
     }
     
-    public String getClauseSatisfaction()
-    {
-        String result = "[";
-        for (int i = 0; i < satisfied_clauses.length; i++)
-        {
-            result += satisfied_clauses[i];
-            if (i < satisfied_clauses.length - 1)
-            {
-                result += ", ";
-            }
-            else
-            {
-                result += "]";
-            }
-        }
-        return result;
-    }
-    
     /**
      * Prints the Formula in this format:
      * [-1 2 3]
@@ -258,5 +190,63 @@ public class Formula
     private int getTruthValue(int variable)
     {
         return truth_values[abs(variable) - 1];
+    }
+    
+    /**
+     * Tests a clause to see if it is satisfied.  A satisfied clause will have
+     * one variable set to TRUE (1).  Variables can be UNSET (-1).
+     * @param clause the index of the clause in formula to be tested.
+     * @return true if the clause is satisfied, which means it has at least
+     * one true variable.
+     */
+    private boolean clauseSatisfied(int clause)
+    {
+        if (clauseHasBeenSatisfied(clause))
+        {
+            return true;
+        }
+        for (int var_index = 0; var_index < formula[clause].length; var_index++)
+        {
+            int variable = getVariableNumber(clause, var_index);
+            if ((getTruthValue(variable) == TRUE && variable > 0) ||
+                (getTruthValue(variable) == FALSE && variable < 0))
+            {
+                satisfied_clauses[clause] = abs(variable);
+                return true;
+            }
+        }
+        return false;
+    }
+    
+    
+    /**
+     * Tests a clause to see if it is a dead end.  An dead-end clause will have
+     * all of its variables set to FALSE (0).  None of its variables can be
+     * TRUE (1) or UNSET (-1).
+     * @param clause the index of the clause in formula to be tested.
+     * @return true if all variables in a clause are FALSE (0). 
+     */
+    private boolean clauseDeadEnd(int clause)
+    {
+        if (clauseHasBeenSatisfied(clause))
+        {
+            return false;
+        }
+        for (int var_index = 0; var_index < formula[clause].length; var_index++)
+        {           
+            int variable = getVariableNumber(clause, var_index);
+            if ((getTruthValue(variable) == TRUE && variable > 0) ||
+                (getTruthValue(variable) == FALSE && variable < 0) ||
+                (getTruthValue(variable) == UNSET))
+            {
+                return false;
+            }
+        }
+        return true;
+    }
+    
+    private boolean clauseHasBeenSatisfied(int clause)
+    {
+        return (satisfied_clauses[clause] != 0);
     }
 }
