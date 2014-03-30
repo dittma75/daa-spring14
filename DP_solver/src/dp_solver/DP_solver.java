@@ -20,7 +20,6 @@ public class DP_solver
         File input = new File(fileName);
         Parser parser = new Parser(input);
         formula = parser.parseFile();	
-        System.out.println(formula.toString());
     }
 
     /**
@@ -76,7 +75,8 @@ public class DP_solver
      * Prints that Formula is satisfiable, along with its solution
      * @param f the satisfiable formula
      */
-    void success (Formula f) {	
+    void success (Formula f) 
+    {	
         System.out.println("Formula is satisfiable");
         System.out.println(f.getSolution());
         System.out.println(f.getClauseSatisfaction());
@@ -86,10 +86,9 @@ public class DP_solver
      * Formula is unsatisfiable
      * @param f the unsatisfiable formula
      */
-    void failure (Formula f) {
-        // Stub		
+    void failure (Formula f) 
+    {	
         System.out.println ("Formula is unsatisfiable");
-
     }
 
     /**
@@ -165,8 +164,8 @@ public class DP_solver
             System.exit(0);
         }
 
-        // Insert timing code here...
+        long start_time = System.currentTimeMillis();
         new DP_solver().solve ( args[0] );
-
+        System.out.println(System.currentTimeMillis() - start_time);
     }
 }
