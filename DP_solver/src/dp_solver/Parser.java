@@ -80,8 +80,7 @@ class Parser
             String[] split_line = nextLine.split(" ");
             int numberOfVariables = Integer.parseInt(split_line[0]);
             int numberOfClauses = Integer.parseInt(split_line[1]);
-            formula.intializeFormula(numberOfClauses);
-            formula.makeTruthValues(numberOfVariables);
+            formula.intializeFormula(numberOfClauses, numberOfVariables);
             return " ";
         }
         return nextLine + " ";
