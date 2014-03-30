@@ -79,7 +79,6 @@ public class DP_solver
     {	
         System.out.println("Formula is satisfiable");
         System.out.println(f.getSolution());
-        System.out.println(f.getClauseSatisfaction());
     }
 
     /**

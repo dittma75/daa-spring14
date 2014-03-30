@@ -83,20 +83,25 @@ public class Formula
     }
     
     /**
-     * Changes the truth value of particular variable to be
-     * unset.
-     * @param variable the truth value to be unset
+     * Changes the truth value of particular variable to be unset.  When a
+     * variable is unset, the clauses satisfied by that variable are reset
+     * to 0 in the satisfaction array, which means that the clause is not
+     * satisfied.
+     * Note:  The var_index corresponding to the truth_values array is 1 less
+     * than the actual number of the variable.
+     * @param var_index the truth value to be unset, where the index is the
+     * variable number - 1.
      */
-    void unsetTruthValue(int variable)
+    void unsetTruthValue(int var_index)
     {
         for (int clause = 0; clause < formula.length; clause++)
         {
-            if (satisfied_clauses[clause] == variable + 1)
+            if (satisfied_clauses[clause] == var_index + 1)
             {
                 satisfied_clauses[clause] = 0;
             }
         }
-        truth_values[variable] = UNSET;
+        truth_values[var_index] = UNSET;
         current_variable--;
     }
     /**
