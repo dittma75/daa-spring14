@@ -1,7 +1,6 @@
 package dp_solver;
 
 import java.io.File;
-import java.util.Arrays;
 
 /**
  *
@@ -20,7 +19,8 @@ public class DP_solver
     {
         File input = new File(fileName);
         Parser parser = new Parser(input);
-        formula = parser.parseFile();		
+        formula = parser.parseFile();	
+        System.out.println(formula.toString());
     }
 
     /**
@@ -79,6 +79,7 @@ public class DP_solver
     void success (Formula f) {	
         System.out.println("Formula is satisfiable");
         System.out.println(f.getSolution());
+        System.out.println(f.getClauseSatisfaction());
     }
 
     /**

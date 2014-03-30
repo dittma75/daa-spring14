@@ -12,6 +12,7 @@ public class Formula
     private int[][] formula;
     private int truth_values[];
     private int current_variable;
+    int[] satisfied_clauses;
     private static final int UNSET = -1;
     private static final int FALSE = 0;
     private static final int TRUE = 1;
@@ -48,11 +49,19 @@ public class Formula
     {
         for (int var_index = 0; var_index < formula[clause].length; var_index++)
         {
-            int variable = getVariableNumber(clause, var_index);
-            if ((getTruthValue(variable) == TRUE && variable > 0) ||
-                (getTruthValue(variable) == FALSE && variable < 0))
+            if (satisfied_clauses[clause] != 0)
             {
                 return true;
+            }
+            else
+            {
+                int variable = getVariableNumber(clause, var_index);
+                if ((getTruthValue(variable) == TRUE && variable > 0) ||
+                    (getTruthValue(variable) == FALSE && variable < 0))
+                {
+                    satisfied_clauses[clause] = abs(variable);
+                    return true;
+                }
             }
         }
         return false;
@@ -103,9 +112,13 @@ public class Formula
      * of variables in each clause.
      * @param clauses the number of clauses that make up this formula.
      */
-    void intializeFormula(int clauses)
+    void intializeFormula(int clauses, int variables)
     {
         formula = new int[clauses][];
+        truth_values = new int[variables];
+        Arrays.fill(truth_values, UNSET);
+        satisfied_clauses = new int[clauses];
+        Arrays.fill(satisfied_clauses, 0);
     }
     
     /**
@@ -120,25 +133,19 @@ public class Formula
     }
     
     /**
-     * Takes number of variables and sizes the array 'truth_values'
-     * accordingly and assigns them to 'UNSET'.  The array is created
-     * with one extra value so index 0 is not used, since there is no
-     * variable 0.
-     * @param num_variables number of variables in clause. 
-     */
-    void makeTruthValues(int num_variables)
-    {
-        truth_values = new int[num_variables];
-        Arrays.fill(truth_values, UNSET);
-        
-    }
-    /**
      * Changes the truth value of particular variable to be
      * unset.
      * @param variable the truth value to be unset
      */
     void unsetTruthValue(int variable)
     {
+        for (int clause = 0; clause < formula.length; clause++)
+        {
+            if (satisfied_clauses[clause] == variable + 1)
+            {
+                satisfied_clauses[clause] = 0;
+            }
+        }
         truth_values[variable] = UNSET;
         current_variable--;
     }
@@ -194,6 +201,23 @@ public class Formula
         return result;
     }
     
+    public String getClauseSatisfaction()
+    {
+        String result = "[";
+        for (int i = 0; i < satisfied_clauses.length; i++)
+        {
+            result += satisfied_clauses[i];
+            if (i < satisfied_clauses.length - 1)
+            {
+                result += ", ";
+            }
+            else
+            {
+                result += "]";
+            }
+        }
+        return result;
+    }
     /**
      * Prints the Formula in this format:
      * [-1 2 3]
