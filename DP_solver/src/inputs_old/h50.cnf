@@ -1,5 +1,4 @@
 c Command line: hgen8 50
-c Unsatisfiable
 p cnf 50 88
 1 42 34 26 0
 50 5 11 35 0

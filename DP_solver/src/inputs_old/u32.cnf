@@ -1,5 +1,4 @@
 c A SAT instance generated from a 3-CNF formula that had 160 clauses and 32 variables
-c unsatisfiable
 p cnf 32 160
 6 -14 26 0
 -22 -18 3 0

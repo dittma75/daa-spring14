@@ -9,38 +9,48 @@ import java.util.ArrayList;
 
 /**
  * Parses a file for use in the evaluation of a CNF formula.
- * 
+ *
  * @author Kevin Dittmar
  * @author Jonathan Frederickson
  * @author Andrew Genova
  */
-class Parser 
+class Parser
 {
-    /**Scans the file for parsing.*/
-    private Scanner scanner;
-    /**Keeps track of the index of the next clause to be added.*/
-    private int clause_counter = 0;
-    /**Stores the parsed formula to be returned.*/
-    private Formula formula;
+
     /**
-     * Initialize the Parser with an input File.  That File will be
-     * read by a Scanner to parse the contents.
+     * Scans the file for parsing.
+     */
+    private Scanner scanner;
+    /**
+     * Keeps track of the index of the next clause to be added.
+     */
+    private int clause_counter = 0;
+    /**
+     * Stores the parsed formula to be returned.
+     */
+    private Formula formula;
+
+    /**
+     * Initialize the Parser with an input File. That File will be read by a
+     * Scanner to parse the contents.
+     *
      * @param input should be a valid .cnf file.
      */
     Parser(File input)
     {
-        try 
+        try
         {
             scanner = new Scanner(input);
-        } 
+        }
         catch (FileNotFoundException ex)
         {
-            Logger.getLogger(Parser.class.getName()).log(Level.SEVERE,null,ex);
+            Logger.getLogger(Parser.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
-    
+
     /**
      * Parse the File on the Scanner as input for CNF evaluation.
+     *
      * @return a valid formula to be used as input for the DP_solver.
      */
     Formula parseFile()
@@ -54,9 +64,10 @@ class Parser
         parseInput(file_string);
         return formula;
     }
-    
+
     /**
      * Puts the file data in the correct format for CNF parsing.
+     *
      * @param next_line the next line of input to be formatted.
      * @return given String with no duplicate or leading spaces.
      */
@@ -76,7 +87,7 @@ class Parser
         {
             return " ";
         }
-        
+
         /* If the line starts with p cnf, it is in the format
          * p cnf number_of_variables number_of_clauses, so extract those
          * initialize the formula.
@@ -91,18 +102,19 @@ class Parser
             formula = new Formula(number_of_clauses, number_of_variables);
             return " ";
         }
-        
+
         /* If it hasn't returned yet, return the line as it stands with
          * a space appended to keep it and the next line from running together.
          */
         return next_line + " ";
     }
-    
+
     /**
      * Parse the data in file_string as clauses to add to the Formula.
-     * @param file_string is a String of integers delimited by spaces that 
-     * represents the clauses of the formula, where each clause is terminated
-     * by a 0.
+     *
+     * @param file_string is a String of integers delimited by spaces that
+     * represents the clauses of the formula, where each clause is terminated by
+     * a 0.
      */
     private void parseInput(String file_string)
     {
@@ -111,7 +123,7 @@ class Parser
          */
         ArrayList<Integer> temp_clause = new ArrayList<Integer>();
         scanner = new Scanner(file_string);
-        
+
         while (scanner.hasNextInt())
         {
             int next_int = scanner.nextInt();
@@ -121,7 +133,7 @@ class Parser
             if (next_int == 0)
             {
                 //Copy the clause contents in the ArrayList to an array format.
-                int[] new_clause = new int [temp_clause.size()];
+                int[] new_clause = new int[temp_clause.size()];
                 for (int i = 0; i < temp_clause.size(); i++)
                 {
                     new_clause[i] = temp_clause.get(i);

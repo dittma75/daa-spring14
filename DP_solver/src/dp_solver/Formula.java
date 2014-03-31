@@ -4,7 +4,7 @@ import static java.lang.Math.abs;
 import java.util.Arrays;
 
 /**
- * Formula represents a Conjunctive Normal Form formula to be tested for 
+ * Formula represents a Conjunctive Normal Form formula to be tested for
  * satisfiability.
  *
  * @author Kevin Dittmar
@@ -12,28 +12,44 @@ import java.util.Arrays;
  * @author Andrew Genova
  */
 public class Formula
-{        
-    /**Stores the formula.*/
-    private int[][] formula;
-    /**Stores the current list of truth values.*/
-    private int truth_values[];
-    /**The next variable to be assigned.*/
-    private int current_variable;
-    /**Stores the clauses that are already satisfied.*/
-    private int[] satisfied_clauses;
-    /**Named constant for unset truth values.*/
-    private static final int UNSET = -1;
-    /**Named constant for false truth values.*/
-    private static final int FALSE = 0;
-    /**Named constant for true truth values.*/
-    private static final int TRUE = 1;
-    
+{
+
     /**
-     * Initializes the formula with the given number of clauses and variables. 
-     * The second dimension of the array will be variable length based
-     * on the number of variables in each clause.
+     * Stores the formula.
+     */
+    private int[][] formula;
+    /**
+     * Stores the current list of truth values.
+     */
+    private int truth_values[];
+    /**
+     * The next variable to be assigned.
+     */
+    private int current_variable;
+    /**
+     * Stores the clauses that are already satisfied.
+     */
+    private int[] satisfied_clauses;
+    /**
+     * Named constant for unset truth values.
+     */
+    private static final int UNSET = -1;
+    /**
+     * Named constant for false truth values.
+     */
+    private static final int FALSE = 0;
+    /**
+     * Named constant for true truth values.
+     */
+    private static final int TRUE = 1;
+
+    /**
+     * Initializes the formula with the given number of clauses and variables.
+     * The second dimension of the array will be variable length based on the
+     * number of variables in each clause.
+     *
      * @param clauses the number of clauses that make up this formula.
-     * @param variables the number of variables that are present in this 
+     * @param variables the number of variables that are present in this
      * formula.
      */
     public Formula(int clauses, int variables)
@@ -45,9 +61,10 @@ public class Formula
         Arrays.fill(this.satisfied_clauses, 0);
         this.current_variable = 0;
     }
-    
+
     /**
      * Tests all of the clauses in the formula to see if they are satisfied.
+     *
      * @return true if all clauses are satisfied.
      */
     boolean isEmpty()
@@ -61,10 +78,11 @@ public class Formula
         }
         return true;
     }
-     
+
     /**
-     * Tests each clause in the formula to see if it's a dead end.  If one
-     * clause is a dead end, then the formula has a dead-end clause.
+     * Tests each clause in the formula to see if it's a dead end. If one clause
+     * is a dead end, then the formula has a dead-end clause.
+     *
      * @return true if the formula has a dead-end clause.
      */
     boolean hasDeadEndClause()
@@ -78,10 +96,11 @@ public class Formula
         }
         return false;
     }
-    
+
     /**
-     * Adds an int array that represents a clause in the formula to be 
+     * Adds an int array that represents a clause in the formula to be
      * considered when testing the satisfiability.
+     *
      * @param index the index of the clause in the formula array.
      * @param clause the clause to be added.
      */
@@ -89,14 +108,14 @@ public class Formula
     {
         formula[index] = clause;
     }
-    
+
     /**
-     * Changes the truth value of particular variable to be unset.  When a
-     * variable is unset, the clauses satisfied by that variable are reset
-     * to 0 in the satisfaction array, which means that the clause is not
-     * satisfied.
-     * Note:  The var_index corresponding to the truth_values array is 1 less
+     * Changes the truth value of particular variable to be unset. When a
+     * variable is unset, the clauses satisfied by that variable are reset to 0
+     * in the satisfaction array, which means that the clause is not satisfied.
+     * Note: The var_index corresponding to the truth_values array is 1 less
      * than the actual number of the variable.
+     *
      * @param var_index the truth value to be unset, where the index is the
      * variable number - 1.
      */
@@ -112,9 +131,11 @@ public class Formula
         truth_values[var_index] = UNSET;
         current_variable--;
     }
+
     /**
-     * Sets the truth value of a variable to true or false
-     * according to the boolean value.
+     * Sets the truth value of a variable to true or false according to the
+     * boolean value.
+     *
      * @param variable the variable to set
      * @param value the boolean value to set
      */
@@ -133,22 +154,24 @@ public class Formula
          */
         current_variable++;
     }
-    
+
     /**
      * Get the next variable to be set to true or false in the backtracking
      * algorithm.
-     * @return the next variable to be assigned a truth value. 
+     *
+     * @return the next variable to be assigned a truth value.
      */
     int getNextVariable()
     {
         return current_variable;
     }
-    
+
     /**
      * Get the String representation of the determined solution to the Formula.
-     * Pre:  formula must be satisfiable and solved for solution to be correct.
-     * @return the solution to the formula in the format:  
-     * [variable=TRUE/FALSE, variable=TRUE/FALSE, ... ]
+     * Pre: formula must be satisfiable and solved for solution to be correct.
+     *
+     * @return the solution to the formula in the format: [variable=TRUE/FALSE,
+     * variable=TRUE/FALSE, ... ]
      */
     public String getSolution()
     {
@@ -172,12 +195,10 @@ public class Formula
         result += "]";
         return result;
     }
-    
+
     /**
-     * Prints the Formula in this format:
-     * [-1 2 3]
-     * [3 1 4]
-     * [-2 -4 3]
+     * Prints the Formula in this format: [-1 2 3] [3 1 4] [-2 -4 3]
+     *
      * @return the Formula, as a String
      */
     @Override
@@ -195,10 +216,11 @@ public class Formula
         }
         return result;
     }
-    
-    /**Get the variable for a particular clause at the specified index.
-     * A negative return value means that the variable is negated.
-     * 
+
+    /**
+     * Get the variable for a particular clause at the specified index. A
+     * negative return value means that the variable is negated.
+     *
      * @param clause the clause the variable is being taken from
      * @param var_index the index of the variable in the clause
      * @return the variable in the specified clause at the specified index.
@@ -207,13 +229,13 @@ public class Formula
     {
         return formula[clause][var_index];
     }
-    
+
     /**
-     * Get the truth value for the corresponding variable.
-     * The variable may or may not be negative, and the value will be
-     * one greater than its index in the truth_values array.  This is
-     * because truth_value indices start at 0, and variable numbers start at 1.
-     * 
+     * Get the truth value for the corresponding variable. The variable may or
+     * may not be negative, and the value will be one greater than its index in
+     * the truth_values array. This is because truth_value indices start at 0,
+     * and variable numbers start at 1.
+     *
      * @param variable the variable whose truth value is to be returned.
      * @return the truth value for the given variable.
      */
@@ -221,13 +243,14 @@ public class Formula
     {
         return truth_values[abs(variable) - 1];
     }
-    
+
     /**
-     * Tests a clause to see if it is satisfied.  A satisfied clause will have
-     * one variable set to TRUE (1).  Variables can be UNSET (-1).
+     * Tests a clause to see if it is satisfied. A satisfied clause will have
+     * one variable set to TRUE (1). Variables can be UNSET (-1).
+     *
      * @param clause the index of the clause in formula to be tested.
-     * @return true if the clause is satisfied, which means it has at least
-     * one true variable.
+     * @return true if the clause is satisfied, which means it has at least one
+     * true variable.
      */
     private boolean clauseSatisfied(int clause)
     {
@@ -238,8 +261,8 @@ public class Formula
         for (int var_index = 0; var_index < formula[clause].length; var_index++)
         {
             int variable = getVariable(clause, var_index);
-            if ((getTruthValue(variable) == TRUE && variable > 0) ||
-                (getTruthValue(variable) == FALSE && variable < 0))
+            if ((getTruthValue(variable) == TRUE && variable > 0)
+                    || (getTruthValue(variable) == FALSE && variable < 0))
             {
                 satisfied_clauses[clause] = abs(variable);
                 return true;
@@ -247,14 +270,14 @@ public class Formula
         }
         return false;
     }
-    
-    
+
     /**
-     * Tests a clause to see if it is a dead end.  An dead-end clause will have
-     * all of its variables set to FALSE (0).  None of its variables can be
-     * TRUE (1) or UNSET (-1).
+     * Tests a clause to see if it is a dead end. An dead-end clause will have
+     * all of its variables set to FALSE (0). None of its variables can be TRUE
+     * (1) or UNSET (-1).
+     *
      * @param clause the index of the clause in formula to be tested.
-     * @return true if all variables in a clause are FALSE (0). 
+     * @return true if all variables in a clause are FALSE (0).
      */
     private boolean clauseDeadEnd(int clause)
     {
@@ -263,21 +286,22 @@ public class Formula
             return false;
         }
         for (int var_index = 0; var_index < formula[clause].length; var_index++)
-        {           
+        {
             int variable = getVariable(clause, var_index);
-            if ((getTruthValue(variable) == TRUE && variable > 0) ||
-                (getTruthValue(variable) == FALSE && variable < 0) ||
-                (getTruthValue(variable) == UNSET))
+            if ((getTruthValue(variable) == TRUE && variable > 0)
+                    || (getTruthValue(variable) == FALSE && variable < 0)
+                    || (getTruthValue(variable) == UNSET))
             {
                 return false;
             }
         }
         return true;
     }
-    
+
     /**
      * Determine whether the given clause has been satisfied by a previous
      * variable assignment or not.
+     *
      * @param clause the clause to be tested for satisfaction.
      * @return true if the clause has been satisfied.
      */
