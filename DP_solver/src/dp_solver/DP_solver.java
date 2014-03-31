@@ -18,7 +18,7 @@ public class DP_solver
      * and then parses the input. 
      * @param fileName Filename given at command line
      */
-    void readFormula ( String fileName ) 
+    void readFormula(String fileName) 
     {
         File input = new File(fileName);
         Parser parser = new Parser(input);
@@ -30,7 +30,7 @@ public class DP_solver
      * @param f is the formula passed to be checked
      * @return true if it contains an empty clause, false otherwise.
      */
-    boolean hasEmptyClause ( Formula f ) 
+    boolean hasEmptyClause(Formula f) 
     {
         return f.hasDeadEndClause();
     }
@@ -40,7 +40,7 @@ public class DP_solver
      * @param f is the formula passed to be checked
      * @return true if all clauses in formula are satisfied. False otherwise.
      */
-    boolean isEmpty ( Formula f ) 
+    boolean isEmpty(Formula f) 
     {
         return f.isEmpty();
     }
@@ -50,7 +50,7 @@ public class DP_solver
      * @param f is the formula whose variable is to be selected.
      * @return branch variable.
      */
-    int selectBranchVar ( Formula f ) 
+    int selectBranchVar(Formula f) 
     {
         return f.getNextVariable();
     }
@@ -62,7 +62,7 @@ public class DP_solver
      * @param f the given formula
      * @param tf the boolean value to be set
      */
-    void setVar ( int var, Formula f, boolean tf) 
+    void setVar(int var, Formula f, boolean tf) 
     {
         f.setTruthValue(var, tf);		
     }
@@ -72,7 +72,7 @@ public class DP_solver
      * @param var the variable to be unassigned
      * @param f the given formula
      */
-    void unset ( int var, Formula f) 
+    void unset(int var, Formula f) 
     {
         f.unsetTruthValue(var);
 
@@ -82,7 +82,7 @@ public class DP_solver
      * Prints that Formula is satisfiable, along with its solution
      * @param f the satisfiable formula
      */
-    void success (Formula f) 
+    void success(Formula f) 
     {	
         System.out.println("Formula is satisfiable");
         System.out.println(f.getSolution());
@@ -92,24 +92,27 @@ public class DP_solver
      * Formula is unsatisfiable
      * @param f the unsatisfiable formula
      */
-    void failure (Formula f) 
+    void failure(Formula f) 
     {	
         System.out.println ("Formula is unsatisfiable");
     }
 
     /**
      * Calls dp() to solve and prints success or failure status
-     * @param fileName 
+     * @param fileName the name of the file from which to read the formula.
      */
-    public void solve ( String fileName ) 
+    public void solve(String fileName) 
     {
-        readFormula ( fileName );
+        readFormula(fileName);
 
-        if (dp ( formula ) )
-            success ( formula );
+        if (dp(formula))
+        {
+            success(formula);
+        }
         else
-            failure ( formula );
-
+        {
+            failure(formula);
+        }
     }
 
     /**
@@ -117,40 +120,48 @@ public class DP_solver
      * @param formula the given formula
      * @return false if branch does not work
      */
-    boolean dp ( Formula formula ) 
+    boolean dp(Formula formula) 
     {
         if (isEmpty(formula)) // First base case: solution found
+        {
             return true;
+        }
         else if (hasEmptyClause(formula)) // Second base case: dead end found
+        {
             return false;
+        }
         else 
         {
             // Pick a branch variable
-            int var = selectBranchVar ( formula );
+            int var = selectBranchVar(formula);
 
             // Try to set var = false in the formula
 
-            setVar ( var, formula, false );
+            setVar(var, formula, false);
 
-            if (dp(formula)) 
+            if (dp(formula))
+            {
                 return true;
+            }
             else 
             {
                 // Unset var in the formula 
-                unset ( var, formula );
+                unset(var, formula);
 
                 // Setting var to false did not work. 
                 // Now try var = true
 
-                setVar ( var, formula, true );
+                setVar(var, formula, true);
 
-                if (dp (formula))
+                if (dp(formula))
+                {
                     return true;
+                }
                 else 
                 {
                     // Neither true nor false worked, so unset the branch 
                     // variable and head back
-                    unset ( var, formula );
+                    unset(var, formula);
                     return false;			
                 }
             }
@@ -163,10 +174,9 @@ public class DP_solver
      */
     public static void main(String[] args) 
     {
-
         if (args.length < 1) 
         {
-            System.err.println ("Usage: java DP_solver cnf-formula");
+            System.err.println("Usage: java DP_solver cnf-formula");
             System.exit(0);
         }
 
