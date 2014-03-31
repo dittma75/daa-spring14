@@ -13,18 +13,25 @@ import java.util.Arrays;
  */
 public class Formula
 {        
+    /**Stores the formula.*/
     private int[][] formula;
+    /**Stores the current list of truth values.*/
     private int truth_values[];
+    /**The next variable to be assigned.*/
     private int current_variable;
+    /**Stores the clauses that are already satisfied.*/
     private int[] satisfied_clauses;
+    /**Named constant for unset truth values.*/
     private static final int UNSET = -1;
+    /**Named constant for false truth values.*/
     private static final int FALSE = 0;
+    /**Named constant for true truth values.*/
     private static final int TRUE = 1;
     
     /**
-     * Initializes the formula with the number of clauses.  The second
-     * dimension of the array will be variable length based on the number
-     * of variables in each clause.
+     * Initializes the formula with the given number of clauses and variables. 
+     * The second dimension of the array will be variable length based
+     * on the number of variables in each clause.
      * @param clauses the number of clauses that make up this formula.
      * @param variables the number of variables that are present in this 
      * formula.

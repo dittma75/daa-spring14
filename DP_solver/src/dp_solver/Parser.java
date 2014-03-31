@@ -16,8 +16,11 @@ import java.util.ArrayList;
  */
 class Parser 
 {
+    /**Scans the file for parsing.*/
     private Scanner scanner;
-    private int clauseCounter = 0;
+    /**Keeps track of the index of the next clause to be added.*/
+    private int clause_counter = 0;
+    /**Stores the parsed formula to be returned.*/
     private Formula formula;
     /**
      * Initialize the Parser with an input File.  That File will be
@@ -52,24 +55,24 @@ class Parser
         return formula;
     }
     
-    /**Puts the file data in the correct format for
-     * CNF parsing.
-     * @return given String with no duplicate or
-     * leading spaces.
+    /**
+     * Puts the file data in the correct format for CNF parsing.
+     * @param next_line the next line of input to be formatted.
+     * @return given String with no duplicate or leading spaces.
      */
-    private String formatInput(String nextLine)
+    private String formatInput(String next_line)
     {
         //Replace all cases with two or more spaces with one space
-        nextLine = nextLine.replaceAll("   *", " ");
+        next_line = next_line.replaceAll("   *", " ");
         //If the line starts with a space, remove it
-        if (nextLine.startsWith(" "))
+        if (next_line.startsWith(" "))
         {
-            nextLine = nextLine.replaceFirst(" ", "");
+            next_line = next_line.replaceFirst(" ", "");
         }
         /* If the line is a comment, ignore it and return a space to add
          * to the file_string.
          */
-        if (nextLine.startsWith("c"))
+        if (next_line.startsWith("c"))
         {
             return " ";
         }
@@ -78,21 +81,21 @@ class Parser
          * p cnf number_of_variables number_of_clauses, so extract those
          * initialize the formula.
          */
-        else if (nextLine.startsWith("p cnf "))
+        else if (next_line.startsWith("p cnf "))
         {
             //Remove data input descriptor.
-            nextLine = nextLine.replace("p cnf ", "");
-            String[] split_line = nextLine.split(" ");
-            int numberOfVariables = Integer.parseInt(split_line[0]);
-            int numberOfClauses = Integer.parseInt(split_line[1]);
-            formula = new Formula(numberOfClauses, numberOfVariables);
+            next_line = next_line.replace("p cnf ", "");
+            String[] split_line = next_line.split(" ");
+            int number_of_variables = Integer.parseInt(split_line[0]);
+            int number_of_clauses = Integer.parseInt(split_line[1]);
+            formula = new Formula(number_of_clauses, number_of_variables);
             return " ";
         }
         
         /* If it hasn't returned yet, return the line as it stands with
          * a space appended to keep it and the next line from running together.
          */
-        return nextLine + " ";
+        return next_line + " ";
     }
     
     /**
@@ -124,11 +127,11 @@ class Parser
                     new_clause[i] = temp_clause.get(i);
                 }
                 temp_clause = new ArrayList<Integer>();
-                formula.addClause(clauseCounter, new_clause);
-                /* Increment the clauseCounter so the next clause will be
+                formula.addClause(clause_counter, new_clause);
+                /* Increment the clause_counter so the next clause will be
                  * stored in the correct place.
                  */
-                clauseCounter++;
+                clause_counter++;
             }
             //Add another variable to this clause.
             else

@@ -2,7 +2,8 @@ package dp_solver;
 
 import java.io.File;
 
-/**DP_solver attempts to satisfy a Conjunctive Normal Form formula
+/**
+ * DP_solver attempts to satisfy a Conjunctive Normal Form formula
  * with the Davis-Putnam backtracking algorithm.
  * 
  * @author Kevin Dittmar
@@ -11,16 +12,17 @@ import java.io.File;
  */
 public class DP_solver
 {
+    /**The formula to be solved by the Davis-Putnam algorithm.*/
     Formula formula;
     
     /**
-     * Takes fileName, makes in input file with the given fileName
+     * Takes file_name, gets an input file with the given file_name
      * and then parses the input. 
-     * @param fileName Filename given at command line
+     * @param file_name the name of the file containing the formula.
      */
-    void readFormula(String fileName) 
+    void readFormula(String file_name) 
     {
-        File input = new File(fileName);
+        File input = new File(file_name);
         Parser parser = new Parser(input);
         formula = parser.parseFile();	
     }
@@ -36,7 +38,8 @@ public class DP_solver
     }
 
     /**
-     * Returns true if the formula has no clauses left, false otherwise.
+     * Returns true if the formula has no clauses left to satisfy, 
+     * false otherwise.
      * @param f is the formula passed to be checked
      * @return true if all clauses in formula are satisfied. False otherwise.
      */
@@ -68,7 +71,7 @@ public class DP_solver
     }
 
     /**
-     * Set given variable to "unassigned" in the given formula.
+     * Set given variable to "unset" in the given formula.
      * @param var the variable to be unassigned
      * @param f the given formula
      */
@@ -99,11 +102,11 @@ public class DP_solver
 
     /**
      * Calls dp() to solve and prints success or failure status
-     * @param fileName the name of the file from which to read the formula.
+     * @param file_name the name of the file from which the formula is read.
      */
-    public void solve(String fileName) 
+    public void solve(String file_name) 
     {
-        readFormula(fileName);
+        readFormula(file_name);
 
         if (dp(formula))
         {
@@ -169,7 +172,7 @@ public class DP_solver
     }
 
     /**
-     * Main method - solves the file passed to it as a parameter
+     * Main method - solves the file passed to it as an argument.
      * @param args contains the file with the cnf-formula in index 0
      */
     public static void main(String[] args) 
