@@ -197,27 +197,6 @@ public class Formula
     }
 
     /**
-     * Prints the Formula in this format: [-1 2 3] [3 1 4] [-2 -4 3]
-     *
-     * @return the Formula, as a String
-     */
-    @Override
-    public String toString()
-    {
-        String result = "";
-        for (int i = 0; i < formula.length; i++)
-        {
-            result += "[";
-            for (int j = 0; j < formula[i].length; j++)
-            {
-                result += " " + formula[i][j] + " ";
-            }
-            result += "]\n";
-        }
-        return result;
-    }
-
-    /**
      * Get the variable for a particular clause at the specified index. A
      * negative return value means that the variable is negated.
      *
