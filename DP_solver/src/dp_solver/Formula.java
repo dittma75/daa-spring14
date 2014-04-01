@@ -81,7 +81,8 @@ public class Formula
 
     /**
      * Tests each clause in the formula to see if it's a dead end. If one clause
-     * is a dead end, then the formula has a dead-end clause.
+     * is unsatisfiable with the current truth assignments, then the formula has
+     * a dead-end clause.
      *
      * @return true if the formula has a dead-end clause.
      */
@@ -112,7 +113,8 @@ public class Formula
     /**
      * Changes the truth value of particular variable to be unset. When a
      * variable is unset, the clauses satisfied by that variable are reset to 0
-     * in the satisfaction array, which means that the clause is not satisfied.
+     * in the satisfaction array, which means that the clause is no longer
+     * satisfied.
      * Note: The var_index corresponding to the truth_values array is 1 less
      * than the actual number of the variable.
      *
@@ -225,7 +227,8 @@ public class Formula
 
     /**
      * Tests a clause to see if it is satisfied. A satisfied clause will have
-     * one variable set to TRUE (1). Variables can be UNSET (-1).
+     * at least one non-negated variable set to TRUE (1) or at least one negated
+     * variable set to FALSE (0). Variables can be UNSET (-1).
      *
      * @param clause the index of the clause in formula to be tested.
      * @return true if the clause is satisfied, which means it has at least one
@@ -251,9 +254,10 @@ public class Formula
     }
 
     /**
-     * Tests a clause to see if it is a dead end. An dead-end clause will have
-     * all of its variables set to FALSE (0). None of its variables can be TRUE
-     * (1) or UNSET (-1).
+     * Tests a clause to see if it is a dead end. A dead-end clause will have
+     * all of its variables evaluate to false. None of its positive variables
+     * can be TRUE (1), and none of its negated variables can be FALSE (0).
+     * A clause can only be dead-ended if none of its variables are UNSET (-1).
      *
      * @param clause the index of the clause in formula to be tested.
      * @return true if all variables in a clause are FALSE (0).
