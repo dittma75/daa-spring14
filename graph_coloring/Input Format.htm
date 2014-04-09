@@ -1,0 +1,114 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<!-- saved from url=(0061)http://www.satcompetition.org/2004/format-benchmarks2004.html -->
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+  <title>benchmarks submission guidelines</title>
+<style type="text/css"></style><style>[touch-action="none"]{ -ms-touch-action: none; touch-action: none; }[touch-action="pan-x"]{ -ms-touch-action: pan-x; touch-action: pan-x; }[touch-action="pan-y"]{ -ms-touch-action: pan-y; touch-action: pan-y; }[touch-action="scroll"],[touch-action="pan-x pan-y"],[touch-action="pan-y pan-x"]{ -ms-touch-action: pan-x pan-y; touch-action: pan-x pan-y; }</style><style id="clearly_highlighting_css" type="text/css">/* selection */ html.clearly_highlighting_enabled ::-moz-selection { background: rgba(246, 238, 150, 0.99); } html.clearly_highlighting_enabled ::selection { background: rgba(246, 238, 150, 0.99); } /* cursor */ html.clearly_highlighting_enabled {    /* cursor and hot-spot position -- requires a default cursor, after the URL one */    cursor: url("chrome-extension://pioclpoplcdbaefihamjohnefbikjilc/clearly/images/highlight--cursor.png") 14 16, text; } /* highlight tag */ em.clearly_highlight_element {    font-style: inherit !important; font-weight: inherit !important;    background-image: url("chrome-extension://pioclpoplcdbaefihamjohnefbikjilc/clearly/images/highlight--yellow.png");    background-repeat: repeat-x; background-position: top left; background-size: 100% 100%; } /* the delete-buttons are positioned relative to this */ em.clearly_highlight_element.clearly_highlight_first { position: relative; } /* delete buttons */ em.clearly_highlight_element a.clearly_highlight_delete_element {    display: none; cursor: pointer;    padding: 0; margin: 0; line-height: 0;    position: absolute; width: 34px; height: 34px; left: -17px; top: -17px;    background-image: url("chrome-extension://pioclpoplcdbaefihamjohnefbikjilc/clearly/images/highlight--delete-sprite.png"); background-repeat: no-repeat; background-position: 0px 0px; } em.clearly_highlight_element a.clearly_highlight_delete_element:hover { background-position: -34px 0px; } /* retina */ @media (min--moz-device-pixel-ratio: 2), (-webkit-min-device-pixel-ratio: 2), (min-device-pixel-ratio: 2) {    em.clearly_highlight_element { background-image: url("chrome-extension://pioclpoplcdbaefihamjohnefbikjilc/clearly/images/highlight--yellow@2x.png"); }    em.clearly_highlight_element a.clearly_highlight_delete_element { background-image: url("chrome-extension://pioclpoplcdbaefihamjohnefbikjilc/clearly/images/highlight--delete-sprite@2x.png"); background-size: 68px 34px; } } </style></head>
+<body style="color: rgb(0, 0, 0); background-color: rgb(255, 255, 204);" link="#000099" vlink="#990099" alink="#000099">
+ 
+<h1>SAT Competition 2004: Benchmark Submission Guidelines</h1>
+    
+<h2>Submission format</h2>
+  The submission can be a set of instances or a generator of instances. The
+set of instances should be representative of the problem to be solved at
+various scale. Generators should provide some parameters to scale the instances. 
+ 
+<h3>Generator format</h3>
+  The generator is a program to be launched on a Linux environment with some
+scaling parameters and a random seed if applicable. (for instance, a random
+3-SAT generator will have two scaling parameters (nbvar,nbclauses) and a
+random seed parameter). It will output the instance on the standard output,
+using the file format below. The command line parameters will appear in the
+first commented lines of the instance.  
+<h3>File format</h3>
+ The benchmark file format will be in a simplified version of the DIMACS
+format: 
+<pre>c<br>c start with comments<br>c<br>c <br>p cnf 5 3<br>1 -5 4 0<br>-1 5 3 4 0<br>-3 -4 0<br></pre>
+  
+<ul>
+ <li>The file can start with comments, that is lines begining with the character
+c. </li>
+  <li>Right after the comments, there is the line p cnf nbvar nbclauses indicating
+that the instance is in CNF format; nbvar is an upper bound on the largest
+index of a variable appearing in the file; nbclauses is the exact number
+of clauses contained in the file. </li>
+  <li>Then the clauses follow. Each clause is a sequence of distinct non-null
+numbers between -nbvar and nbvar ending with 0 on the same line; it cannot
+contain the opposite literals i and -i simultaneously. Positive numbers denote
+the corresponding variables. Negative numbers denote the negations of the
+corresponding variables. </li>
+</ul>
+  
+<h2>Categories</h2>
+  The benchmarks will be submitted in one of the following categories: 
+<ul>
+ <li> Random uniform k-SAT</li>
+ <li> Applications</li>
+ <li> Crafted (all others) </li>
+</ul>
+  Each instance should be submitted as SATISFIABLE,  UNSATISFIABLE or UNKNOWN. 
+
+<font color="green"> <h3>Random uniform k-SAT</h3> That category is
+limited to usual uniform random k-SAT instances.  Only generator
+submissions are allowed here. Any generator must be able to produce
+many essentially different benchmarks for the same scaling parameters
+(given a different random seed). 
+
+<h3>Applications</h3>
+  Here we should find instances from various applications, such as model checking,
+planning, encryption, etc. 
+<p> These are series of instances, but NOT generators. The instances
+here must encode REAL problems.  </p> That category is intended to
+provide a snapshot of the current strength of solvers as engines for
+SAT based applications.
+
+<h3>Crafted (all others)</h3>
+ The benchmarks especially made to give a hard time to the solver.  There
+will be an award for the smallest instance that cannot be  solved by any
+solver. 
+<p> Both instances or instance generators can be submitted. Here, no
+UNKNOWN instances.  For both satisfiable and unsatisfiable instances,
+a proof must be submitted (e.g., a reference to a paper where the
+corresponding theorem is proved).  </p> Benchmarks looking-like
+uniform random instances that were crafted to be even harder will have
+their place in that category this year.
+
+ 
+<h2>Series</h2>
+
+A series is a set of similar benchmarks. For instance, in the random
+category, a series of benchmarks is a set of N benchmarks having the
+same ratio #clauses/#variables or the same number of variables for
+different ratios.  This year, all the series will have the same size
+(it was not the case in the previous competitions), presumably 10
+benchmarks.  The size of the series may change according to the number
+of submitted solvers and benchmarks.
+
+
+<h2>Classes of instances</h2> We noticed last year that solvers can be
+lucky: the results of a given solver on the same benchmark shuffled
+with two different random seeds may be drastically different. This
+year, each original series will be completed by 2 new series made of
+the original benchmarks shuffled with two different random seeds.
+This way, we will have some clues about the robustness of the solvers.
+</font>
+
+<h3><a name="www"></a>Organizing Committee</h3>
+<font style="color: rgb(0, 0, 0);"><a href="http://www.lri.fr/~simon/">
+Laurent Simon</a> (simon@lri.fr) and <a href="http://www.cril.univ-artois.fr/~leberre/">
+Daniel Le Berre</a> (leberre@cril.univ-artois.fr)<br>
+<br>
+Contact: <a href="mailto:SATcompetition@satlive.org">SATcompetition@satlive.org</a><br>
+</font><h3><a name="www">Competition homepage</a></h3>
+<font style="color: rgb(0, 0, 0);">    <a href="http://www.satlive.org/SATCompetition/2004">http://www.satlive.org/SATCompetition/</a>
+        
+</font><p><font color="green"> </font></p>
+<font color="green">     
+</font><hr><font color="green">  [<a href="http://www.satcompetition.org/2004/index.jsp">SAT Competition 2004</a>]   [<a href="http://www.satisfiability.org/SAT04/">
+SAT 2004 Conference </a>  ]   [<a href="http://www.lri.fr/~simon/satex/satex.php3">
+SAT-Ex</a>]   [<a href="http://www.satlib.org/"> SATLIB</a>]   [<a href="http://www.satlive.org/">
+ SAT Live!</a>]     
+</font>
+
+
+  
+</body></html>
