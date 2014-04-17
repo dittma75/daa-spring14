@@ -14,12 +14,7 @@ import java.util.logging.Logger;
  */
 public class GraphParser
 {
-    private static final int RED_START_MODIFIER = 0;
-    private static final int GREEN_START_MODIFIER = 1;
-    private static final int BLUE_START_MODIFIER = 2;
-    private int red[];
-    private int green[];
-    private int blue[];
+    private int colors;
     private Scanner scanner;
     private String cnf_file;
     
@@ -60,9 +55,6 @@ public class GraphParser
         scanner = new Scanner(file_string);
         int total_vertices = scanner.nextInt();
         int total_edges = scanner.nextInt();
-        red = new int[total_vertices];
-        green = new int[total_vertices];
-        blue = new int[total_vertices];
         
         for (int vertex = 0; vertex < total_vertices; vertex++)
         {
@@ -86,7 +78,11 @@ public class GraphParser
      */
     void addDifferentColorClauses(int vertex_i, int vertex_j)
     {
-        
+        for (int color = 0; color < colors; color++)
+        {
+            cnf_file += "\n-" + makeVariable(vertex_i, color) + " -" +
+                        makeVariable(vertex_j, color) + " 0";
+        }
     }
     
     /**
@@ -96,15 +92,42 @@ public class GraphParser
      */
     void addHasColorClause(int vertex)
     {
-        
+        cnf_file += "\n";
+        for (int color = 0; color < colors; color++)
+        {
+            cnf_file += makeVariable(vertex, color) + " ";
+        }
+        cnf_file += "0";
     }
     /**
      * Adds the clauses that make sure a vertex has only one color.
-     * @param vertex the index of the vertex for which three has-one-color
-     * clauses will be added.
+     * @param vertex the index of the vertex for which k has-one-color
+     * clauses will be added, where k is the number of colors.
      */
     void addHasOneColorClauses(int vertex)
     {
-        
+        for (int l_color = 0; l_color < colors - 1; l_color++)
+        {
+            for (int r_color = l_color + 1; r_color < colors; r_color++)
+            {
+                cnf_file += "\n-" + makeVariable(vertex, l_color) + " -" +
+                            makeVariable(vertex, r_color) + " 0";
+            }
+        }
+    }
+    
+    /**Make a variable for a specified color.  The formula is 
+     * number of colors available * (vertex - 1) + color.
+     * For example, if there are 2 colors and 3 vertices,
+     * vertex 1 will have color variables 0-1, vertex 2 will have color
+     * variables 2-3, and vertex 3 will have color variables 4-5.
+     * The vertex - 1 makes the index for the variable array start at 0.
+     * @param vertex number of the vertex for which to generate a variable.
+     * @param color number of the color for which to generate a variable.
+     * @return 
+     */
+    private int makeVariable(int vertex, int color)
+    {
+        return (vertex - 1) * colors + color;
     }
 }
