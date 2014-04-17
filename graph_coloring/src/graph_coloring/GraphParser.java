@@ -117,17 +117,18 @@ public class GraphParser
     }
     
     /**Make a variable for a specified color.  The formula is 
-     * number of colors available * (vertex - 1) + color.
+     * number of colors available * vertex + color + 1.  The +1 eliminates the
+     * 0th variable because 0 is a delimiter in DIMACS format.
      * For example, if there are 2 colors and 3 vertices,
-     * vertex 1 will have color variables 0-1, vertex 2 will have color
-     * variables 2-3, and vertex 3 will have color variables 4-5.
-     * The vertex - 1 makes the index for the variable array start at 0.
+     * vertex 1 will have color variables 1-2, vertex 2 will have color
+     * variables 3-4, and vertex 3 will have color variables 5-6.
      * @param vertex number of the vertex for which to generate a variable.
      * @param color number of the color for which to generate a variable.
-     * @return 
+     * @return a variable made from a color and a vertex to be used in a DIMACS 
+     * clause.
      */
     private int makeVariable(int vertex, int color)
     {
-        return (vertex - 1) * colors + color;
+        return (vertex * colors + color) + 1;
     }
 }
