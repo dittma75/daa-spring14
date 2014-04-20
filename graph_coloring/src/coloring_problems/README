@@ -1,0 +1,7 @@
+Each input file (*.col) specifies an undirected graph.
+
+First line in the input contains two numbers, namely, the number of vertices and the number of edges in the graph
+
+Each subsequent line specifies the endpoint vertices of one edge. 
+
+Vertices are numbered starting at 0.

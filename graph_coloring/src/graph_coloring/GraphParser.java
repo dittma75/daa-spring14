@@ -18,7 +18,7 @@ public class GraphParser
     private Scanner scanner;
     private String cnf_file;
     
-    GraphParser(File input)
+    GraphParser(File input, int colors)
     {
         try
         {
@@ -31,23 +31,25 @@ public class GraphParser
         finally
         {
             cnf_file = "";
+            this.colors = colors;
         }
     }
    
-    void parseGraph()
+    String parseGraph()
     {
         String file_string = "";
         while (scanner.hasNextLine())
         {
             file_string += formatInput(scanner.nextLine());
         }
-        file_string = file_string.replaceAll("  *", " ");
+        file_string = formatInput(file_string);
         parseEdges(file_string);
+        return cnf_file;
     }
     
     String formatInput(String next_line)
     {
-        return next_line.replace("  *", " ");
+        return next_line.replace("  *", " ") + " ";
     }
     
     void parseEdges(String file_string)
