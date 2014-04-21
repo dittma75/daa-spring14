@@ -26,7 +26,8 @@ public class GraphParser
         }
         catch (FileNotFoundException ex)
         {
-            Logger.getLogger(Parser.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(GraphParser.class.getName()).log(
+                    Level.SEVERE, null, ex);
         }
         finally
         {
