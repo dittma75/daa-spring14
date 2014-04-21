@@ -17,6 +17,8 @@ public class GraphParser
     private int colors;
     private Scanner scanner;
     private String cnf_file;
+    private int variables;
+    private int clauses;
     
     GraphParser(File input, int colors)
     {
@@ -45,7 +47,7 @@ public class GraphParser
         }
         file_string = formatInput(file_string);
         parseEdges(file_string);
-        return cnf_file;
+        return "p cnf " + variables + " " + clauses + cnf_file;
     }
     
     String formatInput(String next_line)
@@ -58,6 +60,7 @@ public class GraphParser
         scanner = new Scanner(file_string);
         int total_vertices = scanner.nextInt();
         int total_edges = scanner.nextInt();
+        variables = total_vertices * colors;
         
         for (int vertex = 0; vertex < total_vertices; vertex++)
         {
@@ -85,6 +88,7 @@ public class GraphParser
         {
             cnf_file += "\n-" + makeVariable(vertex_i, color) + " -" +
                         makeVariable(vertex_j, color) + " 0";
+            clauses++;
         }
     }
     
@@ -101,6 +105,7 @@ public class GraphParser
             cnf_file += makeVariable(vertex, color) + " ";
         }
         cnf_file += "0";
+        clauses++;
     }
     /**
      * Adds the clauses that make sure a vertex has only one color.
@@ -115,6 +120,7 @@ public class GraphParser
             {
                 cnf_file += "\n-" + makeVariable(vertex, l_color) + " -" +
                             makeVariable(vertex, r_color) + " 0";
+                clauses++;
             }
         }
     }
