@@ -5,6 +5,11 @@ import java.io.FileNotFoundException;
 import java.util.Scanner;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import org.sat4j.core.VecInt;
+import org.sat4j.minisat.SolverFactory;
+import org.sat4j.specs.ContradictionException;
+import org.sat4j.specs.IProblem;
+import org.sat4j.specs.ISolver;
 
 /**Parses a .col file (information for a Graph) and creates
  * a .cnf file (information for a SAT formula) to be passed to
@@ -19,7 +24,7 @@ public class GraphParser
     private String cnf_file;
     private int variables;
     private int clauses;
-    
+    ISolver solver;
     GraphParser(File input, int colors)
     {
         try
@@ -33,12 +38,13 @@ public class GraphParser
         }
         finally
         {
-            cnf_file = "";
+            solver = SolverFactory.newDefault();
+            solver.setVerbose(true);
             this.colors = colors;
         }
     }
    
-    String parseGraph()
+    ISolver parseGraph()
     {
         String file_string = "";
         while (scanner.hasNextLine())
@@ -47,7 +53,7 @@ public class GraphParser
         }
         file_string = formatInput(file_string);
         parseEdges(file_string);
-        return "p cnf " + variables + " " + clauses + cnf_file;
+        return solver;
     }
     
     String formatInput(String next_line)
@@ -60,7 +66,7 @@ public class GraphParser
         scanner = new Scanner(file_string);
         int total_vertices = scanner.nextInt();
         int total_edges = scanner.nextInt();
-        variables = total_vertices * colors;
+        solver.newVar(total_vertices * colors);
         
         for (int vertex = 0; vertex < total_vertices; vertex++)
         {
@@ -86,9 +92,8 @@ public class GraphParser
     {
         for (int color = 0; color < colors; color++)
         {
-            cnf_file += "\n-" + makeVariable(vertex_i, color) + " -" +
-                        makeVariable(vertex_j, color) + " 0";
-            clauses++;
+            addClause(new int[] {makeVariable(vertex_i, color) * -1, 
+                                 makeVariable(vertex_j, color) * -1});
         }
     }
     
@@ -99,13 +104,12 @@ public class GraphParser
      */
     void addHasColorClause(int vertex)
     {
-        cnf_file += "\n";
+        int[] clause = new int[colors];
         for (int color = 0; color < colors; color++)
         {
-            cnf_file += makeVariable(vertex, color) + " ";
+            clause[color] = makeVariable(vertex, color);
         }
-        cnf_file += "0";
-        clauses++;
+        addClause(clause);
     }
     /**
      * Adds the clauses that make sure a vertex has only one color.
@@ -118,9 +122,8 @@ public class GraphParser
         {
             for (int r_color = l_color + 1; r_color < colors; r_color++)
             {
-                cnf_file += "\n-" + makeVariable(vertex, l_color) + " -" +
-                            makeVariable(vertex, r_color) + " 0";
-                clauses++;
+                addClause(new int[] {makeVariable(vertex, l_color) * -1, 
+                                     makeVariable(vertex, r_color) * -1});
             }
         }
     }
@@ -139,5 +142,21 @@ public class GraphParser
     private int makeVariable(int vertex, int color)
     {
         return (vertex * colors + color) + 1;
+    }
+    
+    public void addClause(int[] clause)
+    {
+        try
+        {
+            // the clause should not contain a 0, only integer (positive or negative)
+            // with absolute values less or equal to MAXVAR
+            // e.g. int [] clause = {1, -3, 7}; is fine
+            // while int [] clause = {1, -3, 7, 0}; is not fine
+            solver.addClause(new VecInt(clause)); // adapt Array to IVecInt
+        }
+        catch (ContradictionException ex)
+        {
+            Logger.getLogger(Graph_coloring.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
 }
