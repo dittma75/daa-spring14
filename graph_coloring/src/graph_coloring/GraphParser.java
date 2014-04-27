@@ -8,7 +8,6 @@ import java.util.logging.Logger;
 import org.sat4j.core.VecInt;
 import org.sat4j.minisat.SolverFactory;
 import org.sat4j.specs.ContradictionException;
-import org.sat4j.specs.IProblem;
 import org.sat4j.specs.ISolver;
 
 /**Parses a .col file (information for a Graph) and creates
@@ -21,39 +20,41 @@ public class GraphParser
 {
     private int colors;
     private Scanner scanner;
-    private String cnf_file;
-    private int variables;
-    private int clauses;
-    ISolver solver;
-    GraphParser(File input, int colors)
+    private int vertices;
+    private int edges;
+    private ISolver solver;
+    private String file_string;
+    GraphParser(File input)
+    {
+        file_string = "";
+        prepareGraph(input);
+    }
+   
+    /* Prepare the file_string and extract 
+     * the number of vertices and clauses.
+     * @param input the file containing the graph.  The first line is in the
+     * format "number_of_vertices number_of_clauses".  The rest of the lines
+     * in the file contain two numbers, where each number represents two
+     * vertices connected by an edge.
+     */ 
+    private void prepareGraph(File input)
     {
         try
         {
             scanner = new Scanner(input);
+            vertices = scanner.nextInt();
+            edges = scanner.nextInt();
+            while (scanner.hasNextLine())
+            {
+                file_string += formatInput(scanner.nextLine());
+            }
+            file_string = formatInput(file_string);
         }
         catch (FileNotFoundException ex)
         {
             Logger.getLogger(GraphParser.class.getName()).log(
                     Level.SEVERE, null, ex);
         }
-        finally
-        {
-            solver = SolverFactory.newDefault();
-            solver.setVerbose(true);
-            this.colors = colors;
-        }
-    }
-   
-    ISolver parseGraph()
-    {
-        String file_string = "";
-        while (scanner.hasNextLine())
-        {
-            file_string += formatInput(scanner.nextLine());
-        }
-        file_string = formatInput(file_string);
-        parseEdges(file_string);
-        return solver;
     }
     
     String formatInput(String next_line)
@@ -61,25 +62,26 @@ public class GraphParser
         return next_line.replace("  *", " ") + " ";
     }
     
-    void parseEdges(String file_string)
+    ISolver parseGraph(int colors)
     {
+        this.colors = colors;
+        solver = SolverFactory.newDefault();
+        solver.newVar(vertices * colors);
         scanner = new Scanner(file_string);
-        int total_vertices = scanner.nextInt();
-        int total_edges = scanner.nextInt();
-        solver.newVar(total_vertices * colors);
         
-        for (int vertex = 0; vertex < total_vertices; vertex++)
+        for (int vertex = 0; vertex < vertices; vertex++)
         {
             addHasColorClause(vertex);
             addHasOneColorClauses(vertex);
         }
         
-        for (int edge = 0; edge < total_edges; edge++)
+        for (int edge = 0; edge < edges; edge++)
         {
             int vertex_i = scanner.nextInt();
             int vertex_j = scanner.nextInt();
             addDifferentColorClauses(vertex_i, vertex_j);
         }
+        return solver;
     }
     
     /**
@@ -156,7 +158,12 @@ public class GraphParser
         }
         catch (ContradictionException ex)
         {
-            Logger.getLogger(Graph_coloring.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(GraphColoring.class.getName()).log(Level.SEVERE, null, ex);
         }
+    }
+    
+    public int getNumberOfVertices()
+    {
+        return vertices;
     }
 }

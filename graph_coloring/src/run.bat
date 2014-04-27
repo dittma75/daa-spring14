@@ -1,1 +1,1 @@
-java graph_coloring.Graph_coloring coloring_problems/4.col > 4col.cnf
+java -cp .;graph_coloring\*; graph_coloring.GraphColoring coloring_problems/4.col 
