@@ -13,14 +13,10 @@ import org.sat4j.specs.IProblem;
  */
 public class GraphColoring
 {
-    private int lower_bound;
-    private int upper_bound;
-    private int last_k;
     private GraphParser parser;
 
     public GraphColoring()
     {
-        lower_bound = 2;
     }
 
     /**
@@ -47,7 +43,6 @@ public class GraphColoring
     {
         File input = new File(file_name);
         parser = new GraphParser(input);
-        upper_bound = parser.getNumberOfVertices();
     }
 
     /**
@@ -58,33 +53,38 @@ public class GraphColoring
      */
     int[] solve()
     {
-        int colors = (lower_bound + upper_bound) / 2;
+        int lower_bound = 2;
+        int upper_bound = parser.getNumberOfVertices();
+        int current_colors = upper_bound;
+        int last_k = 0;
         int[] minimum_solution = null;
+        int solving_colors = upper_bound;
         do
         {
             try
             {
-                IProblem problem = parser.parseGraph(colors);
+                IProblem problem = parser.parseGraph(current_colors);
                 int[] solution = problem.findModel();
                 if (solution != null)
                 {
                     minimum_solution = solution;
-                    upper_bound = colors;
-                    last_k = colors;
+                    solving_colors = current_colors;
+                    upper_bound = current_colors;
+                    last_k = current_colors;
                 }
                 else
                 {
-                    lower_bound = colors;
-                    last_k = colors;
+                    lower_bound = current_colors;
+                    last_k = current_colors;
                 }
-                colors = (lower_bound + upper_bound) / 2;
+                current_colors = (lower_bound + upper_bound) / 2;
             }
             catch (org.sat4j.specs.TimeoutException e)
             {
                 System.out.println("Timeout, sorry!");
             }
-        } while (last_k != colors);
-        return getAssignments(minimum_solution, colors);
+        } while (last_k != current_colors);
+        return getAssignments(minimum_solution, solving_colors);
     }
 
     /**
@@ -99,13 +99,20 @@ public class GraphColoring
     int[] getAssignments(int[] solution, int colors)
     {
         int[] vertex_assignments = new int[solution.length / colors];
+        int vertex = 0;
         for (int variable = 0; variable < solution.length; variable++)
         {
             if (solution[variable] > 0)
             {
-                vertex_assignments[variable / colors] = variable % colors;
+                vertex_assignments[vertex] = solution[variable] % colors;
+                vertex++;
             }
         }
+        for (int i = 0; i < solution.length; i++)
+        {
+            System.out.println(solution[i]);
+        }
+        System.out.println(colors);
         return vertex_assignments;
     }
 
