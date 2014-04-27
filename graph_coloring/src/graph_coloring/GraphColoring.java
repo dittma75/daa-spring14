@@ -6,35 +6,37 @@ import org.sat4j.specs.IProblem;
 /**
  * Solves the graph coloring problem by transforming it into a satisfiability
  * problem.
- * 
+ *
  * @author Kevin Dittmar
  * @author Jonathan Frederickson
  * @author Andrew Genova
  */
-
 public class GraphColoring
 {
     private int lower_bound;
     private int upper_bound;
     private int last_k;
     private GraphParser parser;
+
     public GraphColoring()
     {
         lower_bound = 2;
     }
-    
+
     /**
      * Reads a graph from the file with the given file_name and solves
      * for the minimum number of colors required to color the graph.
-     * 
+     *
      * @param file_name the name of the file describing the graph to solve
-     * @return a solution to the graph coloring problem with the minimum number of colors
+     * @return a solution to the graph coloring problem with the minimum number
+     * of colors
      */
     public int[] colorGraph(String file_name)
     {
         readGraph(file_name);
         return solve();
     }
+
     /**
      * Takes file_name, gets an input file with the given file_name and then
      * parses the input.
@@ -51,6 +53,8 @@ public class GraphColoring
     /**
      * Finds the minimum number of colors that can be used to solve
      * the current graph and stores the solution in current_solution
+     * @return an int array containing the values that satisfy the graph's
+     * SAT clauses.
      */
     int[] solve()
     {
@@ -58,7 +62,7 @@ public class GraphColoring
         int[] minimum_solution = null;
         do
         {
-            try 
+            try
             {
                 IProblem problem = parser.parseGraph(colors);
                 int[] solution = problem.findModel();
@@ -74,14 +78,24 @@ public class GraphColoring
                     last_k = colors;
                 }
                 colors = (lower_bound + upper_bound) / 2;
-            } 
-            catch (org.sat4j.specs.TimeoutException e) {
-                System.out.println("Timeout, sorry!");      
+            }
+            catch (org.sat4j.specs.TimeoutException e)
+            {
+                System.out.println("Timeout, sorry!");
             }
         } while (last_k != colors);
         return getAssignments(minimum_solution, colors);
     }
-    
+
+    /**
+     * Gets a satisfying assignment for the minimum coloring for a graph
+     * solution.
+     *
+     * @param solution the minimum coloring solution to the graph.
+     * @param colors the number of colors that were used.
+     * @return an array with an element for each vertex corresponding to the
+     * number of the color that it was assigned.
+     */
     int[] getAssignments(int[] solution, int colors)
     {
         int[] vertex_assignments = new int[solution.length / colors];
@@ -94,7 +108,7 @@ public class GraphColoring
         }
         return vertex_assignments;
     }
-    
+
     public static void main(String[] args)
     {
         if (args.length < 1)
@@ -106,7 +120,7 @@ public class GraphColoring
         int[] solution = gc.colorGraph(args[0]);
         for (int i = 0; i < solution.length; i++)
         {
-            System.out.println("Variable " + i + " has Color " + solution[i]);
+            System.out.println("Vertex " + i + " has Color " + solution[i]);
         }
     }
 }
