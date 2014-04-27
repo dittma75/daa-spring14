@@ -3,6 +3,16 @@ package graph_coloring;
 import java.io.File;
 import org.sat4j.specs.IProblem;
 
+/**
+ * Solves the graph coloring problem by transforming it into a satisfiability
+ * problem.
+ * 
+ * @author Kevin Dittmar
+ * @author Jonathan Frederickson
+ * @author Andrew Genova
+ */
+
+
 public class GraphColoring
 {
     private int[] current_solution;
@@ -16,6 +26,13 @@ public class GraphColoring
         current_solution = null;
     }
     
+    /**
+     * Reads a graph from the file with the given file_name and solves
+     * for the minimum number of colors required to color the graph.
+     * 
+     * @param file_name the name of the file describing the graph to solve
+     * @return a solution to the graph coloring problem with the minimum number of colors
+     */
     public int[] colorGraph(String file_name)
     {
         readGraph(file_name);
@@ -35,6 +52,10 @@ public class GraphColoring
         upper_bound = parser.getNumberOfVertices();
     }
 
+    /**
+     * Finds the minimum number of colors that can be used to solve
+     * the current graph and stores the solution in current_solution
+     */
     void solve()
     {
         int colors = (lower_bound + upper_bound) / 2;
