@@ -12,10 +12,8 @@ import org.sat4j.specs.IProblem;
  * @author Andrew Genova
  */
 
-
 public class GraphColoring
 {
-    private int[] current_solution;
     private int lower_bound;
     private int upper_bound;
     private int last_k;
@@ -23,7 +21,6 @@ public class GraphColoring
     public GraphColoring()
     {
         lower_bound = 2;
-        current_solution = null;
     }
     
     /**
@@ -36,8 +33,7 @@ public class GraphColoring
     public int[] colorGraph(String file_name)
     {
         readGraph(file_name);
-        solve();
-        return current_solution;
+        return solve();
     }
     /**
      * Takes file_name, gets an input file with the given file_name and then
@@ -56,10 +52,11 @@ public class GraphColoring
      * Finds the minimum number of colors that can be used to solve
      * the current graph and stores the solution in current_solution
      */
-    void solve()
+    int[] solve()
     {
         int colors = (lower_bound + upper_bound) / 2;
-        if (colors != last_k)
+        int[] minimum_solution = null;
+        do
         {
             try 
             {
@@ -67,22 +64,35 @@ public class GraphColoring
                 int[] solution = problem.findModel();
                 if (solution != null)
                 {
-                    current_solution = solution;
+                    minimum_solution = solution;
                     upper_bound = colors;
                     last_k = colors;
-                    solve();
                 }
                 else
                 {
                     lower_bound = colors;
                     last_k = colors;
-                    solve();
                 }
+                colors = (lower_bound + upper_bound) / 2;
             } 
             catch (org.sat4j.specs.TimeoutException e) {
                 System.out.println("Timeout, sorry!");      
             }
+        } while (last_k != colors);
+        return getAssignments(minimum_solution, colors);
+    }
+    
+    int[] getAssignments(int[] solution, int colors)
+    {
+        int[] vertex_assignments = new int[solution.length / colors];
+        for (int variable = 0; variable < solution.length; variable++)
+        {
+            if (solution[variable] > 0)
+            {
+                vertex_assignments[variable / colors] = variable % colors;
+            }
         }
+        return vertex_assignments;
     }
     
     public static void main(String[] args)
@@ -96,7 +106,7 @@ public class GraphColoring
         int[] solution = gc.colorGraph(args[0]);
         for (int i = 0; i < solution.length; i++)
         {
-            System.out.println(solution[i]);
+            System.out.println("Variable " + i + " has Color " + solution[i]);
         }
     }
 }
