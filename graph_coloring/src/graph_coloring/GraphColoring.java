@@ -16,10 +16,10 @@ public class GraphColoring
     private GraphParser parser;
     private int[] solution;
     private int number_of_colors;
-    
+
     public GraphColoring()
     {
-        
+
     }
 
     /**
@@ -49,6 +49,7 @@ public class GraphColoring
     /**
      * Finds the minimum number of colors that can be used to solve
      * the current graph and stores the current_solution in current_solution
+     *
      * @return an int array containing the values that satisfy the graph's
      * SAT clauses.
      */
@@ -56,12 +57,12 @@ public class GraphColoring
     {
         int lower_bound = 2;
         int upper_bound = parser.getNumberOfVertices();
-        
+
         //Next number of colors to try.
         int current_colors = upper_bound;
         //Last number of colors tried.
         int last_colors = 0;
-        
+
         //Minimum number of colors to solve.
         int minimum_colors = upper_bound;
         /* int array that stores the assignments for the SAT variables that
@@ -105,7 +106,7 @@ public class GraphColoring
      * grouped according to the vertex to which they belong.
      * To find the color assigned to a vertex, the array of SAT variables is
      * visualized as n subarrays each of size k, where n is the number of
-     * vertices and k is the number of colors.  There is exactly one positive
+     * vertices and k is the number of colors. There is exactly one positive
      * element in each subarray, so the index that has the positive element
      * within each subarray n corresponds to the color for the nth vertex.
      *
@@ -144,41 +145,45 @@ public class GraphColoring
     /**
      * Get a String representation of the vertex color assignments for the
      * minimum coloring solution for the graph parsed.
+     *
      * @return the minimum solution color assignments for each vertex.
      */
     String printSolution()
     {
-        String assignments = "Minimum number of color needed:  " + 
-                             number_of_colors + 
-                             "\nVertex Color Assignments:\n";
+        String assignments = "Minimum number of color needed:  "
+                             + number_of_colors
+                             + "\nVertex Color Assignments:\n";
         for (int i = 0; i < solution.length; i++)
         {
             assignments += "Vertex " + i + " has Color " + solution[i] + "\n";
         }
         return assignments;
     }
-    
+
     /**
      * Sets the minimum coloring solution for the parsed graph.
+     *
      * @param solution the solution for the parsed graph.
      */
     void setSolution(int[] solution)
     {
         this.solution = solution;
     }
-    
+
     /**
      * Sets the minimum number of colors required to solve the graph
+     *
      * @param number_of_colors the number of colors used in the graph solution.
      */
     void setColors(int number_of_colors)
     {
         this.number_of_colors = number_of_colors;
     }
-    
+
     /**
      * Implements the GraphColoring class to color a graph with the least
      * number of colors possible.
+     *
      * @param args the file name from stdin that contains the graph to color.
      */
     public static void main(String[] args)

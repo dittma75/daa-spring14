@@ -12,8 +12,7 @@ import org.sat4j.specs.ISolver;
 
 /**
  * Parses a .col file (information for a Graph) and creates
- * a .cnf file (information for a SAT formula) to be passed to
- * SAT4J for evaluation.
+ * a formula as a SAT4J ISolver to be passed to SAT4J for evaluation.
  *
  * @author Kevin Dittmar
  */
