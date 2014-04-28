@@ -188,8 +188,10 @@ public class GraphColoring
             System.err.println("Usage: java Graph_coloring graph.col");
             System.exit(0);
         }
+        long start_time = System.currentTimeMillis();
         GraphColoring gc = new GraphColoring();
         gc.colorGraph(args[0]);
         System.out.println(gc.printSolution());
+        System.out.println(System.currentTimeMillis() - start_time);
     }
 }

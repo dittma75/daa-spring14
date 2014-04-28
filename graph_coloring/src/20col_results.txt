@@ -1,0 +1,24 @@
+Minimum number of color needed:  8
+Vertex Color Assignments:
+Vertex 0 has Color 5
+Vertex 1 has Color 7
+Vertex 2 has Color 4
+Vertex 3 has Color 4
+Vertex 4 has Color 6
+Vertex 5 has Color 6
+Vertex 6 has Color 5
+Vertex 7 has Color 0
+Vertex 8 has Color 3
+Vertex 9 has Color 3
+Vertex 10 has Color 2
+Vertex 11 has Color 4
+Vertex 12 has Color 2
+Vertex 13 has Color 3
+Vertex 14 has Color 0
+Vertex 15 has Color 1
+Vertex 16 has Color 0
+Vertex 17 has Color 2
+Vertex 18 has Color 1
+Vertex 19 has Color 0
+
+425
