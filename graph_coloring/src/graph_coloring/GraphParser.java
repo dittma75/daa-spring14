@@ -18,11 +18,29 @@ import org.sat4j.specs.ISolver;
  */
 public class GraphParser
 {
+    /**
+     * The number of colors to be used in the SAT formula.*
+     */
     private int colors;
+    /**
+     * The Scanner used to read the graph .col file.*
+     */
     private Scanner scanner;
+    /**
+     * The number of vertices in the graph.*
+     */
     private int vertices;
+    /**
+     * The number of edges in the graph.*
+     */
     private int edges;
+    /**
+     * The SAT4J solver model used to simulate the graph coloring problem.*
+     */
     private ISolver solver;
+    /**
+     * The String containing all of the graph data from the parsed graph.*
+     */
     private String file_string;
 
     GraphParser(File input)
@@ -57,25 +75,6 @@ public class GraphParser
             addDifferentColorClauses(vertex_i, vertex_j);
         }
         return solver;
-    }
-
-    /**
-     * Adds the clauses that make sure the two vertices connected by an edge
-     * have different colors.
-     *
-     * @param vertex_i the index of the first vertex of the edge.
-     * @param vertex_j the index of the second vertex of the edge.
-     */
-    void addDifferentColorClauses(int vertex_i, int vertex_j)
-    {
-        for (int color = 0; color < colors; color++)
-        {
-            addClause(new int[]
-            {
-                makeVariable(vertex_i, color) * -1,
-                makeVariable(vertex_j, color) * -1
-            });
-        }
     }
 
     /**
@@ -132,6 +131,25 @@ public class GraphParser
     }
 
     /**
+     * Adds the clauses that make sure the two vertices connected by an edge
+     * have different colors.
+     *
+     * @param vertex_i the index of the first vertex of the edge.
+     * @param vertex_j the index of the second vertex of the edge.
+     */
+    private void addDifferentColorClauses(int vertex_i, int vertex_j)
+    {
+        for (int color = 0; color < colors; color++)
+        {
+            addClause(new int[]
+            {
+                makeVariable(vertex_i, color) * -1,
+                makeVariable(vertex_j, color) * -1
+            });
+        }
+    }
+
+    /**
      * Adds the clause that makes sure a vertex has a color.
      *
      * @param vertex the index of the vertex for which a has-color clause will
@@ -169,24 +187,6 @@ public class GraphParser
     }
 
     /**
-     * Make a variable for a specified color. The formula is
-     * number of colors available * vertex + color + 1. The +1 eliminates the
-     * 0th variable because 0 is a delimiter in DIMACS format.
-     * For example, if there are 2 colors and 3 vertices,
-     * vertex 1 will have color variables 1-2, vertex 2 will have color
-     * variables 3-4, and vertex 3 will have color variables 5-6.
-     *
-     * @param vertex number of the vertex for which to generate a variable.
-     * @param color number of the color for which to generate a variable.
-     * @return a variable made from a color and a vertex to be used in a DIMACS
-     * clause.
-     */
-    private int makeVariable(int vertex, int color)
-    {
-        return (vertex * colors + color) + 1;
-    }
-
-    /**
      * Adds a clause to the SAT4J solver.
      *
      * @param clause the clause to be added to the SAT4J solver in int array
@@ -203,5 +203,23 @@ public class GraphParser
         {
             Logger.getLogger(GraphColoring.class.getName()).log(Level.SEVERE, null, ex);
         }
+    }
+
+    /**
+     * Make a variable for a specified color. The formula is
+     * number of colors available * vertex + color + 1. The +1 eliminates the
+     * 0th variable because 0 is a delimiter in DIMACS format.
+     * For example, if there are 2 colors and 3 vertices,
+     * vertex 1 will have color variables 1-2, vertex 2 will have color
+     * variables 3-4, and vertex 3 will have color variables 5-6.
+     *
+     * @param vertex number of the vertex for which to generate a variable.
+     * @param color number of the color for which to generate a variable.
+     * @return a variable made from a color and a vertex to be used in a DIMACS
+     * clause.
+     */
+    private int makeVariable(int vertex, int color)
+    {
+        return (vertex * colors + color) + 1;
     }
 }

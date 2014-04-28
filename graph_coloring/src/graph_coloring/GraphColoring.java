@@ -13,8 +13,17 @@ import org.sat4j.specs.IProblem;
  */
 public class GraphColoring
 {
+    /**
+     * The parser for the graph to be colored.*
+     */
     private GraphParser parser;
+    /**
+     * The minimum coloring solution for the graph.*
+     */
     private int[] solution;
+    /**
+     * The number of colors used to color the graph.*
+     */
     private int number_of_colors;
 
     public GraphColoring()
@@ -35,12 +44,30 @@ public class GraphColoring
     }
 
     /**
+     * Get a String representation of the vertex color assignments for the
+     * minimum coloring solution for the graph parsed.
+     *
+     * @return the minimum solution color assignments for each vertex.
+     */
+    public String printSolution()
+    {
+        String assignments = "Minimum number of color needed:  "
+                             + number_of_colors
+                             + "\nVertex Color Assignments:\n";
+        for (int i = 0; i < solution.length; i++)
+        {
+            assignments += "Vertex " + i + " has Color " + solution[i] + "\n";
+        }
+        return assignments;
+    }
+
+    /**
      * Takes file_name, gets an input file with the given file_name and then
      * parses the input.
      *
      * @param file_name the name of the file containing the formula.
      */
-    void readGraph(String file_name)
+    private void readGraph(String file_name)
     {
         File input = new File(file_name);
         parser = new GraphParser(input);
@@ -53,7 +80,7 @@ public class GraphColoring
      * @return an int array containing the values that satisfy the graph's
      * SAT clauses.
      */
-    void solve()
+    private void solve()
     {
         int lower_bound = 2;
         int upper_bound = parser.getNumberOfVertices();
@@ -115,7 +142,7 @@ public class GraphColoring
      * @return an array with an element for each vertex corresponding to the
      * number of the color that it was assigned.
      */
-    int[] parseSolution(int[] solution, int colors)
+    private int[] parseSolution(int[] solution, int colors)
     {
         /* Each vertex has a number of variables associated with it in solution
          * equivalent to the number of colors used.
@@ -143,29 +170,11 @@ public class GraphColoring
     }
 
     /**
-     * Get a String representation of the vertex color assignments for the
-     * minimum coloring solution for the graph parsed.
-     *
-     * @return the minimum solution color assignments for each vertex.
-     */
-    String printSolution()
-    {
-        String assignments = "Minimum number of color needed:  "
-                             + number_of_colors
-                             + "\nVertex Color Assignments:\n";
-        for (int i = 0; i < solution.length; i++)
-        {
-            assignments += "Vertex " + i + " has Color " + solution[i] + "\n";
-        }
-        return assignments;
-    }
-
-    /**
      * Sets the minimum coloring solution for the parsed graph.
      *
      * @param solution the solution for the parsed graph.
      */
-    void setSolution(int[] solution)
+    private void setSolution(int[] solution)
     {
         this.solution = solution;
     }
@@ -175,7 +184,7 @@ public class GraphColoring
      *
      * @param number_of_colors the number of colors used in the graph solution.
      */
-    void setColors(int number_of_colors)
+    private void setColors(int number_of_colors)
     {
         this.number_of_colors = number_of_colors;
     }
