@@ -5,4 +5,4 @@ Vertex 1 has Color 0
 Vertex 2 has Color 1
 Vertex 3 has Color 1
 
-187
+281

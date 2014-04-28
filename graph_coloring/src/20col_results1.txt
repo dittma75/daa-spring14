@@ -21,4 +21,4 @@ Vertex 17 has Color 2
 Vertex 18 has Color 1
 Vertex 19 has Color 0
 
-328
+280

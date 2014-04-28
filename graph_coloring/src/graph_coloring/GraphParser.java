@@ -15,6 +15,8 @@ import org.sat4j.specs.ISolver;
  * a formula as a SAT4J ISolver to be passed to SAT4J for evaluation.
  *
  * @author Kevin Dittmar
+ * @author Jonathan Frederickson
+ * @author Andrew Genova
  */
 public class GraphParser
 {
@@ -43,6 +45,12 @@ public class GraphParser
      */
     private String file_string;
 
+    /**
+     * Initializes the file_string to the empty string and puts the graph
+     * into a usable format.
+     *
+     * @param input the file containing the graph to be colored.
+     */
     GraphParser(File input)
     {
         file_string = "";
@@ -141,7 +149,7 @@ public class GraphParser
     {
         for (int color = 0; color < colors; color++)
         {
-            addClause(new int[]
+            addSAT4JClause(new int[]
             {
                 makeVariable(vertex_i, color) * -1,
                 makeVariable(vertex_j, color) * -1
@@ -162,7 +170,7 @@ public class GraphParser
         {
             clause[color] = makeVariable(vertex, color);
         }
-        addClause(clause);
+        addSAT4JClause(clause);
     }
 
     /**
@@ -177,7 +185,10 @@ public class GraphParser
         {
             for (int r_color = l_color + 1; r_color < colors; r_color++)
             {
-                addClause(new int[]
+                /* Makes an anonymous int array that represents a clause
+                 * associated with making sure that a vertex has only one color.
+                 */
+                addSAT4JClause(new int[]
                 {
                     makeVariable(vertex, l_color) * -1,
                     makeVariable(vertex, r_color) * -1
@@ -192,7 +203,7 @@ public class GraphParser
      * @param clause the clause to be added to the SAT4J solver in int array
      * format.
      */
-    private void addClause(int[] clause)
+    private void addSAT4JClause(int[] clause)
     {
         try
         {
