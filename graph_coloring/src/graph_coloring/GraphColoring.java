@@ -185,7 +185,7 @@ public class GraphColoring
     {
         if (args.length < 1)
         {
-            System.err.println("Usage: java Graph_coloring graph.col");
+            System.err.println("Usage: java GraphCcoloring graph.col");
             System.exit(0);
         }
         long start_time = System.currentTimeMillis();
